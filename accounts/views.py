@@ -174,14 +174,33 @@ def user(request):
         username = request.POST.get('username')
         phone = request.POST.get('phone')
         email = request.POST.get('email')
-        # changepassword
+        if(username):
+            request.user.name = username
+            request.user.save()
+            print(request.user.name)
+        if(phone):
+            request.user.phone = phone
+            request.user.save()
+            print(request.user.name)
+        if(email):
+            request.user.email = email
+            request.user.save()
+            print(request.user.name)
+            # changepassword
         oldpassword = request.POST.get('oldpassword')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
-        # address
 
-        print('{}-{}-{}'.format(username, phone, email))
-        print('{}-{}-{}'.format(oldpassword, password, password2))
+        if(request.user.check_password(oldpassword)):
+            if(password == password2):
+                request.user.set_password(password)
+                request.user.save()
+                messages.success(request, f'Password Changed')
+            else:
+                messages.warning(request, f'Passwords Dont match')
+        else:
+            messages.warning(request, f'Password incorrect')
+
     addresses = Addresses.objects.filter(user_id=request.user.id)
     return render(request, "Accounts/user.html", {'title': 'Account', 'addresses': addresses, 'navbar': navbar_details})
 

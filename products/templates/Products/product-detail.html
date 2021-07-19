@@ -28,6 +28,22 @@
 	</div>
 
 	<!-- Modal -->
+	<div class="modal fade" id="AddedtowishlistModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span style="font-size: large; font-weight: bold; color: lightgreen; margin-right: 20px;" class="txt">Item Added to Wishlist</span>	
+				<img src="https://image.flaticon.com/icons/png/128/845/845646.png" height="70px" width="70px">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shoping</button>
+				<a href="{% url 'wishlist' %}"><button type="button" class="btn btn-primary">Go to wishlist</button></a>
+			</div>
+	 	</div>
+	</div>
+	</div>
+
+	<!-- Modal -->
 	<div class="modal fade" id="AlertModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -95,16 +111,37 @@
 												<div class="numbers-row">
 													<label for="french-hens">Qty:</label>
 													<input type="number" id="french-hens" value="1">
-													<button class="btn btn-lg btn-success" data-id={{details.main_details.id}} onclick="addtocart({{details.main_details.id}})" type="submit"><span class="lnr lnr-cart"></span>Add to Cart</button>
-													<button type="button" class="btn btn-lg btn-warning col-sm-12"><span class="lnr lnr-cart"></span>Buy Now</button>	
+													
 												</div>
                                               </form>  
+											  <button class="btn btn-lg btn-success" data-id={{details.main_details.id}} onclick="addtocart({{details.main_details.id}})" type="submit"><span class="lnr lnr-cart"></span>Add to Cart</button>
+													<button type="button" onclick="addtowishlist({{details.main_details.id}})" class="btn btn-lg btn-warning col-sm-12"><span class="lnr lnr-heart"></span>Add to Wishlist</button>	
 										</div>
                                         <script>
 											var url = "{% url 'addtocart'  %}"
+											var wishlist_url = "{% url 'addtowishlist'  %}"
 											jQuery("#cart").submit(function(e){
     												return false
 												});
+											function addtowishlist(id){
+												jQuery.ajax({
+													url:wishlist_url,
+													type:'POST',
+													data:{'id':id},
+													success:function(res){
+														if(res.success){
+																$("#AddedtowishlistModalCenter").modal();
+																getcart()
+															}
+															else{
+																$("#AlertModalCenter").modal();
+															}
+														
+														
+													}
+												})
+											}
+
 											function addtocart(i){
 												jQuery.ajax(
 													{
@@ -131,8 +168,8 @@
                                         
 										<div class="action-heiper">
 											<!--<a href="#"><span class="lnr lnr-sync"></span></a>-->
-											<a href="#"><span class="lnr lnr-cart"></span></a>
-											<a href="#"><span class="lnr lnr-heart"></span></a>
+											<a href="{% url 'cart' %}"><span class="lnr lnr-cart"></span></a>
+											<a href="{% url 'wishlist' %}"><span class="lnr lnr-heart"></span></a>
 										</div>	
 									</div>
 								</div>

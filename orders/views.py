@@ -181,3 +181,16 @@ def wishlist(request):
                 'wishlist_id': wishlist_id, 'product_url': product_url, 'prod_name': prod_name, 'prod_image': prod_image, 'prod_price': prod_price}
         return JsonResponse(wish_dict)
     return render(request, 'Orders/wishlist.html', {'title': 'Wishlist', 'navbar': navbar.details()})
+
+
+@csrf_exempt
+def addtowishlist(request):
+    if(request.method == 'POST' and request.user.is_authenticated):
+        if(request.POST.get('id')):
+            prod = Product.objects.get(pk=request.POST.get('id'))
+            new_wishlist_entry = Wishlist(
+                product_id=prod, user_id=request.user)
+            new_wishlist_entry.save()
+            return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})

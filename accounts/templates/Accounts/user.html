@@ -295,20 +295,10 @@
 												<th class="product-name"><span class="nobr">Product Name</span></th>
                                                 <th class="product-name"><span class="nobr">Order No.</span></th>
 												<th class="product-price"><span class="nobr"> Total Price </span></th>
-												<th class="product-invoice"><span class="nobr"> Download Invoice </span></th>
+												<!--<th class="product-invoice"><span class="nobr"> Download Invoice </span></th>-->
 											</tr>
 										</thead>
 										<tbody id='orderobjectsbody'>
-											<tr>
-												<!--<td class="product-remove"><a href="#">x</a></td>
-												<td class="product-thumbnail"><a href="#"><img src="img/wishlist/1.jpg" alt="" /></a></td>-->
-												<td class="product-name"><a href="#"><span>&bull;</span>Vestibulum<br><span>&bull;</span> suscipit</a></td>
-                                                <td class="product-name"><a href="#">GHJGHJGJHGHJHJHJ</a></td>
-												<td class="product-price"><span class="amount">Rs35.00</span></td>
-												<td class="product-invoice"><a href="#">Download</a></td>
-												<!--<td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
-												<td class="product-add-to-cart"><a href="#"> Buy It Again</a></td>-->
-											</tr>
 											<script>
 												function renderorders(res){
 													ordersbody = document.getElementById('orderobjectsbody')
@@ -326,7 +316,7 @@
 															name_string=name_string+'<span>&bull;</span>'+ product_name_list[j]+'<br>'
 														}
 														console.log(res[i].order_id)
-													order_tr.innerHTML='<td class="product-name"><a href="#">'+name_string+'</a></td><td class="product-name"><a href="#">'+res[i].order_id+'</a></td><td class="product-price"><span class="amount">'+res[i].total_price+'</span></td><td class="product-invoice"><a href="#">Download</a></td>'
+													order_tr.innerHTML='<td class="product-name"><a href="#">'+name_string+'</a></td><td class="product-name"><a href="#">'+res[i].order_id+'</a></td><td class="product-price"><span class="amount">'+res[i].total_price+'</span></td>'
 													ordersbody.appendChild(order_tr)
 													}
 														
