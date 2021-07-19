@@ -10,9 +10,9 @@
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs tabs-left">
 								<li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
-								<li><a href="#chnage_passwrd" data-toggle="tab">Change Password</a></li>
+								<li><a href="#change_password" data-toggle="tab">Change Password</a></li>
 								<li><a href="#manageaddress" data-toggle="tab">Manage Address</a></li>
-								<li><a href="#reentorders" data-toggle="tab">Recent Orders</a></li>
+								<li><a href="#recentorders" data-toggle="tab">Recent Orders</a></li>
 							<!--<li><a href="#returnorders" data-toggle="tab">Return Orders</a></li>-->
 							</ul>
 							</div>
@@ -44,7 +44,7 @@
             
             			</div>
             
-									<div class="tab-pane" id="chnage_passwrd">
+									<div class="tab-pane" id="change_password">
 									<form action="" method='post'>
 									<div class="form-group login-page">
 										<label for="">Old Password<span>*</span></label>
@@ -285,7 +285,7 @@
             
            							 </div>
             
-										<div class="tab-pane" id="reentorders">
+										<div class="tab-pane" id="recentorders">
 										<div class="wishlist-table table-responsive">
 										<table>
 										<thead>
@@ -307,15 +307,15 @@
 														ordersbody.removeChild(child);
 														child = ordersbody.lastElementChild;
 													}
-													console.log(res)
+													
 													for(var i in res){
 														order_tr=document.createElement('tr')
 														product_name_list=res[i].product_name
 														name_string=''
-														for(var j in product_name_list){
-															name_string=name_string+'<span>&bull;</span>'+ product_name_list[j]+'<br>'
-														}
-														console.log(res[i].order_id)
+														Object.entries(product_name_list).forEach(([key, value]) => {
+															console.log(key, value);
+															name_string=name_string+'<span>&bull;</span>'+ key+' x '+value+'<br>'
+															});
 													order_tr.innerHTML='<td class="product-name"><a href="#">'+name_string+'</a></td><td class="product-name"><a href="#">'+res[i].order_id+'</a></td><td class="product-price"><span class="amount">'+res[i].total_price+'</span></td>'
 													ordersbody.appendChild(order_tr)
 													}

@@ -135,11 +135,11 @@ def getorder(request):
     ord_count = 0
     for order in orders:
         ord_count = ord_count+1
-        product_name = []
+        product_name = {}
         order_id = order.id
         total_price = order.total_price
         for cart in order.cart_ids.all():
-            product_name.append(cart.product_id.productname)
+            product_name[cart.product_id.productname] = cart.quantity
         orders_dict[ord_count] = {
             'product_name': product_name, 'order_id': order_id, 'total_price': total_price}
 
@@ -188,9 +188,10 @@ def addtowishlist(request):
     if(request.method == 'POST' and request.user.is_authenticated):
         if(request.POST.get('id')):
             prod = Product.objects.get(pk=request.POST.get('id'))
-            new_wishlist_entry = Wishlist(
-                product_id=prod, user_id=request.user)
-            new_wishlist_entry.save()
+            if(len(Wishlist.objects.filter(product_id=prod, user_id=request.user)) < 1):
+                new_wishlist_entry = Wishlist(
+                    product_id=prod, user_id=request.user)
+                new_wishlist_entry.save()
             return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
