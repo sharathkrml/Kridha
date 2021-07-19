@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from accounts.models import Addresses, CustomUser
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
@@ -14,21 +15,24 @@ navbar = NavBar(Category)
 @csrf_exempt
 def addtocart(request):
     if request.method == 'POST':
-        print(request.POST)
         user = request.user
-        product_id = request.POST['product_id']
-        product = Product.objects.get(pk=product_id)
-        quantity = request.POST['quantity']
-        if(len(Cart.objects.filter(product_id=product, user_id=user, ordered=False)) == 0):
-            # checks if there is an entry,if no
-            new = Cart(user_id=user, product_id=product,
-                       quantity=int(quantity), ordered=False)
-            new.save()
+        if(user.is_authenticated):
+            product_id = request.POST['product_id']
+            product = Product.objects.get(pk=product_id)
+            quantity = request.POST['quantity']
+            if(len(Cart.objects.filter(product_id=product, user_id=user, ordered=False)) == 0):
+                # checks if there is an entry,if no
+                new = Cart(user_id=user, product_id=product,
+                           quantity=int(quantity), ordered=False)
+                new.save()
+            else:
+                old_entry = Cart.objects.filter(
+                    product_id=product, user_id=user).filter(ordered=False).first()
+                old_entry.quantity = old_entry.quantity + int(quantity)
+                old_entry.save()
+            return JsonResponse({'success': True})
         else:
-            old_entry = Cart.objects.filter(
-                product_id=product, user_id=user).filter(ordered=False).first()
-            old_entry.quantity = old_entry.quantity + int(quantity)
-            old_entry.save()
+            return JsonResponse({'success': False})
 
     return HttpResponse(status=200)
 
@@ -43,36 +47,41 @@ def getcart(request):
             cart_object = Cart.objects.get(pk=request.POST['change_id'])
             cart_object.quantity = request.POST['quantity']
             cart_object.save()
-    cart_products = Cart.objects.filter(
-        user_id=request.user).filter(ordered=False)
-    print(cart_products)
-    cart_dict = {}
-    j = 0
-    total = 0
-    for i in cart_products:
-        j = j+1
-        d = {}
-        d['cart_id'] = i.id
-        d['product_name'] = i.product_id.productname
-        d['product_url'] = reverse('product_url') + i.product_id.slug
-        d['selling_price'] = i.product_id.selling_price
-        d['quantity'] = i.quantity
-        d['image'] = i.product_id.image[1:-
-                                        1].replace("'", '').replace(" ", '').split(',')[0]
-        d['product_total'] = i.product_id.selling_price * \
-            i.quantity
-        cart_dict[j] = d
-        total = total + i.product_id.selling_price * i.quantity
-    j = 0
-    cart_dict['total'] = total
-    return JsonResponse(cart_dict)
+    if(request.user.is_authenticated):
+        cart_products = Cart.objects.filter(
+            user_id=request.user).filter(ordered=False)
+        print(cart_products)
+        cart_dict = {}
+        j = 0
+        total = 0
+        for i in cart_products:
+            j = j+1
+            d = {}
+            d['cart_id'] = i.id
+            d['product_name'] = i.product_id.productname
+            d['product_url'] = reverse('product_url') + i.product_id.slug
+            d['selling_price'] = i.product_id.selling_price
+            d['quantity'] = i.quantity
+            d['image'] = i.product_id.image[1:-
+                                            1].replace("'", '').replace(" ", '').split(',')[0]
+            d['product_total'] = i.product_id.selling_price * \
+                i.quantity
+            cart_dict[j] = d
+            total = total + i.product_id.selling_price * i.quantity
+        j = 0
+        cart_dict['total'] = total
+        return JsonResponse(cart_dict)
+    else:
+        return JsonResponse({})
 
 
+@login_required
 @csrf_exempt
 def cart(request):
     return render(request, 'Orders/cart.html', {'title': 'Cart', 'navbar': navbar.details()})
 
 
+@login_required
 @csrf_exempt
 def checkout(request):
     if(request.method == 'POST'):
@@ -138,6 +147,7 @@ def getorder(request):
     return JsonResponse(orders_dict)
 
 
+@login_required
 @csrf_exempt
 def wishlist(request):
     if(request.method == 'POST'):

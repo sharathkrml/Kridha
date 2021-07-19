@@ -78,7 +78,6 @@ def login(request):
     if request.method == "POST":
         phone = request.POST['phone']
         password = request.POST['password']
-        phone = "+91" + phone
         user = authenticate(request, phone=phone, password=password)
         print(user)
         if user != None:

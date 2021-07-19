@@ -146,14 +146,13 @@ def product(request, slug):
         "image": image_dict,
         "stylist_notes": product.stylist_notes
     }
-    #additional_details = {}
-    # for i in field_list:
-    #    if(product.additional_info()[i] != 'nan'):
-    #        key = i.replace('_', ' ').title()
-    #        additional_details[key] = product.additional_details()[i]
-    print(product.additional_info)
+    additional_details = product.additional_details()
+    nan_removed_dictionary = {}
+    for k in additional_details:
+        if(additional_details[k] != 'nan'):
+            nan_removed_dictionary[k] = additional_details[k]
 
-    details = {'main_details': main_details
+    details = {'main_details': main_details, 'additional_details': nan_removed_dictionary
                }
     return render(request, 'Products/product-detail.html', {'title': product.productname, 'navbar': navbar.details(), 'details': details})
 

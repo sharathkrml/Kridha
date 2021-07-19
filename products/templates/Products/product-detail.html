@@ -27,6 +27,24 @@
 	</div>
 	</div>
 
+	<!-- Modal -->
+	<div class="modal fade" id="AlertModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span style="font-size: large; font-weight: bold; color: lightgreen; margin-right: 20px;" class="txt">Login First</span>	
+				<img src="https://image.flaticon.com/icons/png/512/1828/1828843.png" height="70px" width="70px">
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<a href="{% url 'login' %}"><button type="button" class="btn btn-primary">Login</button></a>
+
+			</div>
+	 	</div>
+	</div>
+	</div>
+
 <div class="all-hyperion-page">
 			<div class="container">
 				<div class="row">
@@ -97,9 +115,14 @@
 															quantity : document.getElementById("french-hens").value,
 														},
 														success:function(res){
-															console.log(res)
-															getcart()
-															$("#exampleModalCenter").modal();
+															if(res.success){
+																$("#exampleModalCenter").modal();
+																getcart()
+															}
+															else{
+																$("#AlertModalCenter").modal();
+															}
+															
 														}
 													}
 												)

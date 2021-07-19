@@ -2,6 +2,7 @@ from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from django.utils.text import slugify
 # Create your models here.
+import json
 
 
 class Category(MPTTModel):
@@ -41,3 +42,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.productname
+
+    def additional_details(self):
+        info = self.additional_info
+        json_acceptable_string = info.replace("'", "\"").replace(
+            "nan", "\"nan\"")
+        dict = json.loads(json_acceptable_string)
+        return(dict)
