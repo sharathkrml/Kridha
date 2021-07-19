@@ -99,7 +99,6 @@ def logout(request):
 def forgot(request):
     if request.method == "POST":
         phone = request.POST['phone']
-        phone = "+91" + phone
         key2 = random.randint(1, 999999)
         request.session['key2'] = key2
         user = CustomUser.objects.filter(phone=phone).first()
