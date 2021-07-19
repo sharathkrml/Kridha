@@ -1,0 +1,301 @@
+
+
+{% extends "Accounts/base.html" %}
+{% block content %}
+{% load static %}
+
+<!-- magnific-popup css -->
+<link rel="stylesheet" href="{% static 'Accounts/css/magnific-popup.css' %}">		
+<!-- modernizr css -->
+<script src="{% static 'Accounts/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+		
+
+
+<!-- Modal -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span style="font-size: large; font-weight: bold; color: lightgreen; margin-right: 20px;" class="txt">Item Added to Cart</span>	
+				<img src="https://image.flaticon.com/icons/png/128/845/845646.png" height="70px" width="70px">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shoping</button>
+				<a href="{% url 'checkout' %}"><button type="button" class="btn btn-primary">Checkout</button></a>
+			</div>
+	 	</div>
+	</div>
+	</div>
+
+<div class="all-hyperion-page">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+						<!-- product-simple-area-start -->
+						<div class="product-simple-area ptb-80">
+							<div class="row">
+								<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+									<div class="tab-content">
+										<div class="tab-pane active" id="view0">
+											<a class="image-link" href="{{details.main_details.main_image}}"><img  src="{{details.main_details.main_image}}" alt=""></a>
+										</div>	
+                                        {% for k,v in details.main_details.image.items %}						
+										<div class="tab-pane" id="view{{k}}">
+											<a class="image-link" href="{{v}}"><img src="{{v}}" alt=""></a>							
+										</div>
+                                        {% endfor%}
+									</div>
+									  <!-- Nav tabs -->
+									<ul class="sinple-tab-menu" role="tablist">
+										<li class=" active"><a href="#view0" data-toggle="tab"><img style="width:79px; height:99px;" src="{{details.main_details.main_image}}" alt="" /></a></li>
+										{% for k,v in details.main_details.image.items %}						
+                                            <li><a href="#view{{k}}" data-toggle="tab"><img src="{{v}}" alt="" /></a></li>
+                                        {% endfor%}
+										</ul>									
+							   </div>
+								<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+									<div class="product-simple-content">
+										<div class="sinple-c-title">
+											<h3>{{details.main_details.name}}</h3>
+										</div>
+										<div class="checkbox">
+											<span><i class="fa fa-check-square" aria-hidden="true"></i>In stock</span>
+										</div>
+										<span> SKU:MH03</span>
+										<div class="product-price-star star-2">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o"></i>
+											<i class="fa fa-star-o"></i>
+											<span>(1Review)&nbsp;&nbsp;|&nbsp;&nbsp; Add Your Review </span>
+										</div>
+											<div> <strike>₹{{details.main_details.MRP}}</strike> </div>
+											<h4>₹{{details.main_details.MRP}} </h4>
+										<div class="quick-add-to-cart">
+											<form method="post" id='cart' class="cart">
+												<div class="numbers-row">
+													<label for="french-hens">Qty:</label>
+													<input type="number" id="french-hens" value="1">
+													<button class="btn btn-lg btn-success" data-id={{details.main_details.id}} onclick="addtocart({{details.main_details.id}})" type="submit"><span class="lnr lnr-cart"></span>Add to Cart</button>
+													<button type="button" class="btn btn-lg btn-warning col-sm-12"><span class="lnr lnr-cart"></span>Buy Now</button>	
+												</div>
+                                              </form>  
+										</div>
+                                        <script>
+											var url = "{% url 'addtocart'  %}"
+											jQuery("#cart").submit(function(e){
+    												return false
+												});
+											function addtocart(i){
+												jQuery.ajax(
+													{
+														type:'POST',
+														url:url,
+														data:{
+															product_id : i,
+															quantity : document.getElementById("french-hens").value,
+														},
+														success:function(res){
+															console.log(res)
+															getcart()
+															$("#exampleModalCenter").modal();
+														}
+													}
+												)
+											}
+										</script>
+                                        
+										<div class="action-heiper">
+											<!--<a href="#"><span class="lnr lnr-sync"></span></a>-->
+											<a href="#"><span class="lnr lnr-cart"></span></a>
+											<a href="#"><span class="lnr lnr-heart"></span></a>
+										</div>	
+									</div>
+								</div>
+							</div>							
+						</div>
+						<!-- product-simple-area-end -->
+						<div class="product-info-detailed pb-80">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="product-info-tab">
+										<!-- Nav tabs -->
+										<ul class="product-info-tab-menu" role="tablist">
+											<li class="active"><a href="#details" data-toggle="tab">details</a></li>
+                                            <li><a href="#property" data-toggle="tab">Properties</a></li>
+                                            <!-- <li><a href="#careinstru" data-toggle="tab">Care Instruction</a></li> -->
+                                             <!--<li><a href="#warranty" data-toggle="tab">Warranty</a></li>--> 
+                                              <!--  <li><a href="#return" data-toggle="tab">Return</a></li> -->
+											<li><a href="#reviews" data-toggle="tab">reviews 1</a></li> 
+										</ul>
+											<!-- Tab panes -->
+										<div class="tab-content">
+											<div class="tab-pane active" id="details">
+												<div class="product-info-tab-content">
+													<p>{{details.main_details.stylist_notes}}</p>
+												</div>
+											</div>
+                                            
+                                            <div class="tab-pane" id="property">
+												<div class="product-info-tab-content">
+													
+													<ul>
+                                                        {% for k,v in details.additional_details.items %}
+														<li> <b>{{k}}</b> : {{v}}</li>
+                                                        {% endfor %}
+													</ul>
+												</div>
+											</div>
+                                            
+                                            
+                                            <!-- <div class="tab-pane" id="careinstru">
+												<div class="product-info-tab-content">
+													<p>Chilly careinstru is just an excuse to throw on your toasty, handsome new Oslo Trek Hoodie. It features an adjustable drawstring hood and a kangaroo pocket for extra hand warmth. The ultra-soft, cozy lining will have you wishing for more brisk days.</p>
+													<ul>
+														<li> Brown hoodie with black detail.</li>
+														<li>Pullover.</li>
+														<li>Adjustable drawstring hood.</li>
+														<li>Ribbed cuffs/waistband.</li>
+														<li>Machine wash/dry.</li>
+													</ul>
+												</div>
+											</div> -->
+                                            
+                                            
+                                            <!--<div class="tab-pane" id="warranty">
+												<div class="product-info-tab-content">
+													<p>Chilly warranty is just an excuse to throw on your toasty, handsome new Oslo Trek Hoodie. It features an adjustable drawstring hood and a kangaroo pocket for extra hand warmth. The ultra-soft, cozy lining will have you wishing for more brisk days.</p>
+													<ul>
+														<li> Brown hoodie with black detail.</li>
+														<li>Pullover.</li>
+														<li>Adjustable drawstring hood.</li>
+														<li>Ribbed cuffs/waistband.</li>
+														<li>Machine wash/dry.</li>
+													</ul>
+												</div>
+											</div>-->
+                                            
+                                            <!-- <div class="tab-pane" id="return">
+												<div class="product-info-tab-content">
+													<p>Chilly return is just an excuse to throw on your toasty, handsome new Oslo Trek Hoodie. It features an adjustable drawstring hood and a kangaroo pocket for extra hand warmth. The ultra-soft, cozy lining will have you wishing for more brisk days.</p>
+													<ul>
+														<li> Brown hoodie with black detail.</li>
+														<li>Pullover.</li>
+														<li>Adjustable drawstring hood.</li>
+														<li>Ribbed cuffs/waistband.</li>
+														<li>Machine wash/dry.</li>
+													</ul>
+												</div>
+											</div> -->
+                                            
+											<div class="tab-pane" id="reviews">
+												<div class="customer-review-top">
+													<h3>Customer Reviews</h3>
+													<h4>Plazathemes</h4>
+													<div class="cus-review-left">
+														<div class="single-customer-rating">
+															<span>Quality</span>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star-o"></i>
+															<i class="fa fa-star-o"></i>
+														</div>
+														<div class="single-customer-rating">
+															<span>Price</span>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star-o"></i>
+															<i class="fa fa-star-o"></i>
+														</div>
+														<div class="single-customer-rating">
+															<span>Value</span>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+														</div>
+													</div>
+													<div class="cus-review-left">
+														<p>Plazathemes</p>
+														<span> Review by Plazathemes </span>
+														<span> Posted on 7/21/16 </span>
+													</div>
+												</div>
+												<div class="customer-review-bottom fix">
+													<h2>You're reviewing:</h2>
+													<h2>Bruno Compete Hoodie</h2>
+													<p>Your Rating <span>*</span></p>
+													<div class="cus-review-left">
+														<div class="single-customer-rating">
+															<span>Price</span>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star-o"></i>
+															<i class="fa fa-star-o"></i>
+														</div>
+														<div class="single-customer-rating">
+															<span>Value</span>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star-o"></i>
+														</div>
+														<div class="single-customer-rating">
+															<span> Quality</span>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+															<i class="fa fa-star"></i>
+														</div>
+													</div>	
+												</div>
+												<div class="customer-review-form">
+													<form>
+														<div class="form-group contuct_f">
+															<label for="exampleInputEmail1">Nickname <span>*</span></label>
+															<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Name">
+														</div>
+														<div class="form-group contuct_f">
+															<label for="exampleInputPassword1">Summary <span>*</span></label>
+															<input type="email" class="form-control" id="exampleInputPassword1" placeholder="Email">
+														</div>
+														<div class="form-group contuct_f">
+															<label for="exampleInputPassword1">Review <span>*</span></label>
+															<textarea class="form-control" rows="3"></textarea>
+														</div>
+														<button type="submit" class="btn btn-default contact-btn">Submit Review</button>
+													</form>	
+												</div>												
+											</div>
+										</div>										
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+						<div class="hyper-banner pt-80 pb-40">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="single-banner">
+										<a href="#"></a>
+									</div>
+								</div>
+							</div>						
+						</div>
+						
+
+					</div>
+				</div>
+			</div>
+		</div>
+    {% endblock %}

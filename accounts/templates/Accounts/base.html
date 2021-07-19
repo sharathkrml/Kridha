@@ -1,0 +1,339 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        {% if title %}
+        <title>{{title}}</title>
+    	{% else %}
+        <title>HOME</title>
+    	{% endif %}
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="{% static 'Accounts/js/jquery3.6.0.js' %}"></script>
+		
+        <!--<link rel="icon" href="img/favicon.png" />
+         Place favicon.ico in the root directory -->
+		<!-- google-font -->
+		<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet"> 
+		<!-- all css here -->
+		<!-- bootstrap v3.3.6 css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/bootstrap.min.css' %}">
+		<!-- animate css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/animate.css' %}">
+		<!-- jquery-ui.min css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/jquery-ui.min.css' %}">
+		<!-- meanmenu css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/meanmenu.min.css' %}">
+		<!-- nivo-slider css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/nivo-slider.css' %}">		
+		<!-- owl.carousel css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/owl.carousel.css' %}">
+		<!--linearicons css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/linearicons-icon-font.min.css' %}">
+		<!-- font-awesome css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/font-awesome.min.css' %}">
+		<!-- style css -->
+		<link rel="stylesheet" href="{% static 'Accounts/css/style.css' %}">
+		<!-- responsive css -->
+        <link rel="stylesheet" href="{% static 'Accounts/css/responsive.css' %}" />
+
+    </head>
+    <body onload = 'getcart()'>
+       
+		<header>
+			<div class="header-top-area ptb-10 hidden-xs header-top-area-4">
+				<div class="container">
+					<div class="row">
+										
+						<div class="col-lg-9 col-md-8 col-sm-7 header-top-right-4">
+						
+							<div class="header-top-left">
+								<ul>
+								{% if user.is_authenticated %}
+				  					<li class="click_menu"><a href="#">{{user.name}} <i class="fa fa-angle-down"></i></a>
+									<ul class="click_menu_show">
+											<li><a href="{% url 'user' %}">My Account</a></li>
+											<li><a href="{% url 'wishlist' %}">My Wish List</a></li>
+											<li><a href="{% url 'logout' %}">Logout</a></li>
+										</ul>
+									</li>
+                			{% else %}
+									<li><a href="{% url 'login' %}">Login</a></li>
+									<li><a href="{% url 'signup' %}">Sign Up</a></li>
+									
+                {% endif %}
+                                
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header-bottom-area home-page-2 ptb-10">
+				<div class="container">
+					<div class="row">
+
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+							<div class="menu-search-box scnd-fix">
+								<form action="{% url 'home' %}search/" method="get">
+									<input id='q' name='q' type="text" placeholder="Search here..."/>
+									<button type="submit"><span class="lnr lnr-magnifier"></span></button>
+								</form>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+							<div class="logo logo2">
+								<a href="{% url 'home' %}"><img src="{% static 'Accounts/img/logo.jpg' %}" alt="" /></a>
+							</div>					
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
+							<div class="header-bottom-right-4-inner">
+								<a href="{% url 'wishlist' %}"><span class="lnr lnr-heart"></span></a>
+							</div>					
+							<div class="header-bottom-right header-bottom-right-4">
+								<div class="shop-cart shop-cart-4">									
+									<a href="{% url 'cart' %}"><span class="lnr lnr-cart"></span></a>
+								</div>
+								<div class="shop-cart-hover shop-cart-hover-4 fix">
+									<ul id="cart_id">
+
+										
+
+									</ul>
+								</div>
+								<script>
+									cart_url = "{% url 'getcart' %}"
+									function delcartproduct(id){
+											jQuery.ajax({
+												url:cart_url,
+												type:'post',
+												data:{'delete_id':id},
+												success:function(res){
+													rendercart(res)
+												}
+											})
+										}
+									function rendercart(res) {
+													cart_ul = document.getElementById('cart_id')
+													var child = cart_ul.lastElementChild; 
+													while (child) {
+														cart_ul.removeChild(child);
+														child = cart_ul.lastElementChild;
+													}
+													var product_count = 0
+													for (var index in res){
+														if(index=='total'){
+															console.log()
+															total_li = document.createElement('li')
+															total_li.setAttribute("class","total-price")
+																total_span = document.createElement('span')
+																total_span.innerHTML = 'Total Rs '+ res['total']
+															total_li.appendChild(total_span)
+															checkout_url="{% url 'checkout' %}"
+															cart_ul.appendChild(total_li)
+															checkout_li = document.createElement('li')
+															checkout_li.setAttribute("class","checkout-bg")
+																checkout_link = document.createElement('a')
+																checkout_link.setAttribute('href',checkout_url)
+																checkout_link.innerHTML =' checkout <i class="fa fa-angle-right"></i>'
+															checkout_li.appendChild(checkout_link)
+															cart_ul.appendChild(checkout_li)
+
+														}else{
+															product_count=product_count+1
+															cart_li = document.createElement('li');
+	
+														image_div = document.createElement('div');
+														image_div.setAttribute('class',"cart-img")
+															image_a = document.createElement('a')
+															image_a.setAttribute('href',res[index]['product_url'])
+																image_img = document.createElement('img')
+																image_img.setAttribute('src',res[index]['image'])
+															image_a.appendChild(image_img)
+															image_div.appendChild(image_a)
+														cart_li.appendChild(image_div)
+														content_div = document.createElement('div');
+														content_div.setAttribute('class','cart-content')
+														content_h4 = document.createElement('h4')
+															content_a =  document.createElement('a')
+															content_a.setAttribute('href',res[index]['product_url'])
+															content_a.innerHTML=res[index]['quantity'] + ' X ' + res[index]['product_name']
+															content_h4.appendChild(content_a)
+														content_span = document.createElement('span')
+														content_span.setAttribute('class',"cart-price")
+														content_span.innerHTML=res[index]['quantity']+' X ' + res[index]['selling_price']+' = '+res[index]['product_total']
+														content_div.appendChild(content_h4)
+														content_div.appendChild(content_span)
+														cart_li.appendChild(content_div)
+	
+														delete_div = document.createElement('div');
+															var del = 'delcartproduct('+ res[index]['cart_id'] +')'
+															delete_div.setAttribute('onclick',del)
+															delete_i = document.createElement('i')
+															delete_i.setAttribute('class',"fa fa-times-circle")
+															delete_div.appendChild(delete_i)
+														cart_li.appendChild(delete_div)
+														cart_ul.appendChild(cart_li)
+														}
+														
+													}
+
+													console.log(product_count)
+													}
+										
+
+									function getcart () {
+											jQuery.ajax({
+												url:cart_url,
+												type:'GET',
+												success: function(res) {
+													rendercart(res)
+													}})
+										
+										}
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- header-end -->
+		<!-- mainmenu-area-start -->
+		<div class="mainmenu-area home-page-2 mainmenu-area-4" id="main_h">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="mainmenu hidden-xs">
+							<nav>
+								<ul>
+									<li><a href="{% url 'home' %}">Home</a>
+										
+									</li>
+									{% for heading,values in navbar.gtfive.items %}
+									<li><a href="{% url 'category_url' %}{{heading|slugify}}">{{heading}}</a>
+										<div class="megamenu">
+											{% for i in values %}
+												{% for j in i %}
+												<span>
+													<a href="{% url 'category_url' %}{{ j|slugify }}">{{j}}</a>
+												</span>
+												{% endfor %}
+											{% endfor %}
+										</div>
+									</li>
+									{% endfor %}
+									{% for heading,values in navbar.ltfive.items %}
+									<li><a href="{% url 'category_url' %}{{heading|slugify}}">{{ heading }}</a>
+										<div class="megamenu megamenu2 living-megamenu">
+											<span>
+												{% for value in values %}
+												<!--<a href="Collection.html">{{ value }}</a>-->
+												<a href="{% url 'category_url' %}{{ value|slugify }}">{{ value }}</a>
+												{% endfor %}
+											</span>
+											
+										</div>									
+									</li>
+									{% endfor%}
+
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mobile-menu-area hidden-sm hidden-md hidden-lg">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="mobile-menu">
+							<nav id="mobile-menu">
+								<ul>
+									<li class="active"><a href="index.html">Home</a>
+										<ul>
+											<li><a href="index.html">home</a></li>
+											<li><a href="index-2.html">Cart</a></li>
+											<li><a href="index-4.html">My WishList</a></li>
+										</ul>
+									</li>
+									<li><a href="cart.html">Cart</a>
+										
+									</li>
+									
+									
+									<li><a href="#">pages</a>
+										<ul>
+											<li><a href="wishlist.html">my wishlist</a></li>
+											<li><a href="cart.html"> My cart </a></li>
+											<li><a href="checkout.html">checkout</a></li>
+											<li><a href="user_accountpage.html">My account</a></li>
+											<li><a href="contact.html">contact us</a></li>
+										</ul>									
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+            {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+          </div>
+		<!-- footer-area-end -->
+		<!-- .copyright-area-start -->
+		<div class="copyright-area copyright-4">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mar_b-30">
+						<div class="copyright text-left">
+							<p>2021 @ All Rights Reserved - <a href="#"></a></p>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<div class="copyright-img text-right">
+							<a href="#"><img src="{% static 'Accounts/img/payment.png' %}" alt="" /></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- .copyright-area-end -->
+		
+		<!-- all js here -->
+		<!-- jquery latest version -->
+        <script src="{% static 'Accounts/js/vendor/jquery-1.12.0.min.js' %}"></script>
+		<!-- bootstrap js -->
+        <script src="{% static 'Accounts/js/bootstrap.min.js' %}"></script>
+		<!-- owl.carousel js -->
+        <script src="{% static 'Accounts/js/owl.carousel.min.js' %}"></script>
+		<!-- meanmenu js -->
+        <script src="{% static 'Accounts/js/jquery.meanmenu.js' %}"></script>
+		<!-- jquery-ui js -->
+        <script src="{% static 'Accounts/js/jquery-ui.min.js' %}"></script>
+		<!-- wow js -->
+        <script src="{% static 'Accounts/js/wow.min.js' %}"></script>
+		<!-- scrolly js -->
+        <script src="{% static 'Accounts/js/jquery.scrolly.js' %}"></script>		
+		<!-- magnific-popup js -->
+        <script src="{% static 'Accounts/js/jquery.magnific-popup.min.js' %}"></script>	
+		<!--  countdown js -->
+        <script src="{% static 'Accounts/js/jquery.countdown.min.js' %}"></script>	
+		<!-- nivo.slider js -->
+        <script src="{% static 'Accounts/js/jquery.nivo.slider.js' %}"></script>			
+		<!-- plugins js -->
+        <script src="{% static 'Accounts/js/plugins.js' %}"></script>
+		<!-- main js -->
+        <script src="{% static 'Accounts/js/main.js' %}"></script>
+    </body>
+</html>

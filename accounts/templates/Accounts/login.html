@@ -1,0 +1,38 @@
+{% extends "Accounts/base.html" %}
+{% block content %}
+<div class="login-area ptb-80">
+	<div class="container">
+		<div class="row">
+			<div class=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="login-title">
+					<h3>Registered Customers</h3>
+					<span>If you have an account, sign in with your email address.</span>
+				</div>
+				<div class="login-form">
+					<form action='' method='post'>									
+						<div class="form-group login-page">
+					    	<label for="phone">Phone <span>*</span></label>
+				    		<input type="text" class="form-control" id="phone" name="phone">
+						</div>								
+						<div class="form-group login-page">
+							<label for="password">Password <span>*</span></label>
+							<input type="Password" class="form-control" id="password" name="password">
+						</div>	
+						<button type="submit" class="btn btn-default login-btn">Sign In</button>
+					</form>						
+				</div>
+				<a href="{% url 'forgot' %}" class="back">Forgot Your Password?</a>
+			</div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="login-title">
+					<h3>New Customers</h3>
+					<span>Creating an account has many benefits: check out faster, keep more than one address, track orders and more.</span>
+				</div>
+				<form action="{% url 'signup' %}">
+			    	<button type="submit" class="btn btn-default login-btn">Create an Account</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

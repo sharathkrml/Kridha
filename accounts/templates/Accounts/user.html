@@ -1,0 +1,406 @@
+{% extends "Accounts/base.html" %}
+{% block content %}
+<div class="login-area ptb-80">
+				<div class="container">
+					<div class="container">
+					<div  class="col-sm-12">
+							<h3>Edit Profile</h3>
+							<hr/>
+							<div class="col-sm-3"> <!-- required for floating -->
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs tabs-left">
+								<li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
+								<li><a href="#chnage_passwrd" data-toggle="tab">Change Password</a></li>
+								<li><a href="#manageaddress" data-toggle="tab">Manage Address</a></li>
+								<li><a href="#reentorders" data-toggle="tab">Recent Orders</a></li>
+							<!--<li><a href="#returnorders" data-toggle="tab">Return Orders</a></li>-->
+							</ul>
+							</div>
+
+							<div class="col-sm-9">
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div class="tab-pane active" id="profile">
+								<div class="login-form">
+								<form action="" method='post'>
+									<div class="form-group login-page">
+										<label for="">User Name <span>*</span></label>
+										<input type="text" class="form-control" value="{{user.name}}" id="username" name="username">
+									</div>
+									<div class="form-group login-page">
+										<label for="">Phone No. <span>*</span></label>
+										<input type="text" class="form-control" value="{{user.phone}}" id="phone" name="phone">
+									</div>
+												
+									<div class="form-group login-page">
+										<label for="">Email <span>*</span></label>
+										<input type="email" class="form-control" value="{{user.email}}" id="email" name="email">
+									</div>								
+									
+									<button type="submit" class="btn btn-default login-btn">Submit</button>
+								</form>						
+							</div>
+							
+            
+            			</div>
+            
+									<div class="tab-pane" id="chnage_passwrd">
+									<form action="" method='post'>
+									<div class="form-group login-page">
+										<label for="">Old Password<span>*</span></label>
+										<input type="password" class="form-control" id="oldpassword" name="oldpassword">
+									</div>
+									<div class="form-group login-page">
+										<label for="">New Password<span>*</span></label>
+										<input type="password" class="form-control" id="password" name="password">
+									</div>
+																	
+									<div class="form-group login-page">
+										<label for="">Confirm Password<span>*</span></label>
+										<input type="password" class="form-control" id="password2" name="password2">
+									</div>								
+									
+									<button type="submit" class="btn btn-default login-btn">Submit</button>
+								</form>	
+             
+             					</div>
+            
+            
+								<div class="tab-pane" id="manageaddress">
+								<div class="col-md-12 col-sm-12 col-xs-12" id="displayaddress">
+								
+								<h4 class="profile_addresstab">Choose Address</h4>
+								{% for address in addresses %}
+								<div class="col-md-6 col-sm-6 col-xs-12 multiple_address">
+                                <label class="radio-inline">
+								<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="{{address.id}}"> {{address.fullname}}<br>{{address.building_details}}<br>{{address.area_details}}<br>{{address.town_details}} {{address.state}} {{address.pin_code}}<br> Phone number: {{address.mobile_no}}<br>
+							<button value="{{address.id}}|{{address.fullname}}|{{address.mobile_no}}|{{address.pin_code}}|{{address.building_details}}|{{address.area_details}}|{{address.landmark_details}}|{{address.town_details}}|{{address.state}}|{{address.address_type}}" style='background: none!important;
+  											border: none;
+  											padding: 0!important;
+  											/*optional*/
+  											font-family: arial, sans-serif;
+  											/*input has OS specific font-family*/
+  											color: #069;
+  											text-decoration: underline;
+  											cursor: pointer;' onclick="editaddress(this.value)">edit</button></br>
+								</label>
+                               </div>
+								{% endfor %}
+								<script>
+								function editaddress(address) {
+									form = document.getElementById('addoredit')
+									form.action = "{% url 'editaddress' %}"
+									var id = address.split("|")[0]
+									console.log(id)
+									var fullname = address.split("|")[1]
+									console.log(fullname)
+									var mobile_no = address.split("|")[2]
+									console.log(mobile_no)
+									var pin_code = address.split("|")[3]
+									console.log(pin_code)
+									var building_details = address.split("|")[4]
+									console.log(building_details)
+									var area_details = address.split("|")[5]
+									console.log(area_details)
+									var landmark_details = address.split("|")[6]
+									console.log(landmark_details)
+									var town_details = address.split("|")[7]
+									console.log(town_details)
+									var state = address.split("|")[8]
+									console.log(state)
+									var address_type = address.split("|")[9]
+									console.log(address_type)
+
+									document.getElementById('address_id').value = id
+									document.getElementById('fullname').value = fullname
+									document.getElementById('mobile_no').value = mobile_no
+									document.getElementById('pin_code').value = pin_code
+									document.getElementById('building_details').value = building_details
+									document.getElementById('area_details').value = area_details
+									document.getElementById('landmark_details').value = landmark_details
+									document.getElementById('town_details').value = town_details
+									document.getElementById('state').value = state
+									document.getElementById('address_type').value = address_type
+									var addressfields = document.getElementById("addressfields");
+									var addressbutton = document.getElementById("addressbutton");
+									var displayaddress = document.getElementById("displayaddress");
+  									addressfields.style.display = "block";
+  									addressbutton.style.display = "none";
+									displayaddress.style.display = "none"
+									}
+									</script>
+								<script>
+								function addaddress() {
+									var addressfields = document.getElementById("addressfields");
+									var addressbutton = document.getElementById("addressbutton");
+									var displayaddress = document.getElementById("displayaddress");
+  									addressfields.style.display = "block";
+  									addressbutton.style.display = "none";
+									displayaddress.style.display = "none"
+									document.getElementById('fullname').value = ""
+									document.getElementById('mobile_no').value = ""
+									document.getElementById('pin_code').value = ""
+									document.getElementById('building_details').value = ""
+									document.getElementById('area_details').value = ""
+									document.getElementById('landmark_details').value = ""
+									document.getElementById('town_details').value = ""
+									document.getElementById('state').value = ""
+									document.getElementById('address_type').value = ""
+									}
+									</script>
+                                </div>
+								<button id="addressbutton" type="button" class="btn btn-primary" style="display: block;" onclick="addaddress()">Add Address</button>
+                                
+                                
+                             
+									<div class="col-md-12 col-sm-12" id="addressfields" style="display: none;">
+									
+									<h4 class="profile_addresstab">Enter New Address Here</h4>
+									<form id="addoredit" action="{% url 'addaddress' %}" method='post'>
+									<div class="col-md-6"  style="display: none;">
+										<div class="checkout-form-list">
+											<label>Address_id<span class="required">*</span></label>
+											<input type="text" class="form-control" id="address_id" name="address_id">
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="checkout-form-list">
+											<label>Full name <span class="required">*</span></label>
+											<input type="text" class="form-control" id="fullname" name="fullname">
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="checkout-form-list">
+											<label>Mobile number<span class="required">*</span></label>										
+											<input type="number" class="form-control" id="mobile_no" name="mobile_no">
+										</div>
+									</div>
+									
+									<div class="col-md-12">
+										<div class="checkout-form-list">
+											<label>Pin Code <span class="required">*</span></label>
+											<input type="number" class="form-control" id="pin_code" name="pin_code">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="checkout-form-list">
+											<label>Flat, House no., Building, Company, Apartment<span class="required">*</span></label>
+											<input type="text" class="form-control" id="building_details" name="building_details">
+										</div>
+									</div><div class="col-md-12">
+										<div class="checkout-form-list">
+											<label>Area, Colony, Street, Sector, Village <span class="required">*</span></label>
+											<input type="text" class="form-control" id="area_details" name="area_details">
+										</div>
+									</div><div class="col-md-12">
+										<div class="checkout-form-list">
+											<label>Landmark <span class="required">*</span></label>
+											<input type="text" class="form-control" id="landmark_details" name="landmark_details">
+										</div>
+									</div><div class="col-md-12">
+										<div class="checkout-form-list">
+											<label>Town/City <span class="required">*</span></label>
+											<input type="text" class="form-control" id="town_details" name="town_details">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="checkout-form-list">
+											<label>State / Province / Region <span class="required">*</span></label>
+											<select name="state" id="state" class="form-control">
+												<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+												<option value="Andhra Pradesh">Andhra Pradesh</option>
+												<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+												<option value="Bihar">Bihar</option>
+												<option value="Assam">Assam</option>
+												<option value="Chhattisgarh">Chhattisgarh</option>
+												<option value="Chandigarh">Chandigarh</option>
+												<option value="Daman and Diu">Daman and Diu</option>
+												<option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli</option>
+												<option value="Lakshadweep">Lakshadweep</option>
+												<option value="Delhi">Delhi</option>
+												<option value="Goa">Goa</option>
+												<option value="Puducherry">Puducherry</option>
+												<option value="Haryana">Haryana</option>
+												<option value="Gujarat">Gujarat</option>
+												<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+												<option value="Himachal Pradesh">Himachal Pradesh</option>
+												<option value="Karnataka">Karnataka</option>
+												<option value="Jharkhand">Jharkhand</option>
+												<option value="Madhya Pradesh">Madhya Pradesh</option>
+												<option value="Kerala">Kerala</option>
+												<option value="Manipur">Manipur</option>
+												<option value="Maharashtra">Maharashtra</option>
+												<option value="Mizoram">Mizoram</option>
+												<option value="Meghalaya">Meghalaya</option>
+												<option value="Odisha">Odisha</option>
+												<option value="Nagaland">Nagaland</option>
+												<option value="Rajasthan">Rajasthan</option>
+												<option value="Punjab">Punjab</option>
+												<option value="Tamil Nadu">Tamil Nadu</option>
+												<option value="Sikkim">Sikkim</option>
+												<option value="Tripura">Tripura</option>
+												<option value="Telangana">Telangana</option>
+												<option value="Uttarakhand">Uttarakhand</option>
+												<option value="Uttar Pradesh">Uttar Pradesh</option>
+												<option value="West Bengal">West Bengal</option>
+											</select>
+											
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="checkout-form-list">
+											<label>Address Type<span class="required">*</span></label>
+											<select name="address_type" id="address_type" class="form-control">
+												<option value="Home">Home(7am - 9pm)</option>
+												<option value="Work">Work(10am to 5pm)</option>
+											</select>
+											
+										</div>
+									</div>
+									<button type="submit" class="btn btn-default login-btn">Submit</button>
+									
+									</form>
+									<button class="btn btn-default login-btn" style='background: none!important;
+  											border: none;
+  											padding: 0!important;
+  											/*optional*/
+  											font-family: arial, sans-serif;
+  											/*input has OS specific font-family*/
+  											color: #069;
+  											text-decoration: underline;
+  											cursor: pointer;' onclick="canceladd()">Cancel</button>
+									<script>
+								function canceladd() {
+									var addressfields = document.getElementById("addressfields");
+									var addressbutton = document.getElementById("addressbutton");
+									var displayaddress = document.getElementById("displayaddress");
+  									addressfields.style.display = "none";
+									displayaddress.style.display = "block"
+									addressbutton.style.display = "block"
+									}
+									</script>
+             						</div>                  
+									
+                                
+            
+           							 </div>
+            
+										<div class="tab-pane" id="reentorders">
+										<div class="wishlist-table table-responsive">
+										<table>
+										<thead>
+											<tr>
+												<!--<th class="product-remove"><span class="nobr">Remove</span></th>
+												<th class="product-thumbnail">Image</th>-->
+												<th class="product-name"><span class="nobr">Product Name</span></th>
+                                                <th class="product-name"><span class="nobr">Order No.</span></th>
+												<th class="product-price"><span class="nobr"> Total Price </span></th>
+												<th class="product-invoice"><span class="nobr"> Download Invoice </span></th>
+											</tr>
+										</thead>
+										<tbody id='orderobjectsbody'>
+											<tr>
+												<!--<td class="product-remove"><a href="#">x</a></td>
+												<td class="product-thumbnail"><a href="#"><img src="img/wishlist/1.jpg" alt="" /></a></td>-->
+												<td class="product-name"><a href="#"><span>&bull;</span>Vestibulum<br><span>&bull;</span> suscipit</a></td>
+                                                <td class="product-name"><a href="#">GHJGHJGJHGHJHJHJ</a></td>
+												<td class="product-price"><span class="amount">Rs35.00</span></td>
+												<td class="product-invoice"><a href="#">Download</a></td>
+												<!--<td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
+												<td class="product-add-to-cart"><a href="#"> Buy It Again</a></td>-->
+											</tr>
+											<script>
+												function renderorders(res){
+													ordersbody = document.getElementById('orderobjectsbody')
+													var child = ordersbody.lastElementChild; 
+													while (child) {
+														ordersbody.removeChild(child);
+														child = ordersbody.lastElementChild;
+													}
+													console.log(res)
+													for(var i in res){
+														order_tr=document.createElement('tr')
+														product_name_list=res[i].product_name
+														name_string=''
+														for(var j in product_name_list){
+															name_string=name_string+'<span>&bull;</span>'+ product_name_list[j]+'<br>'
+														}
+														console.log(res[i].order_id)
+													order_tr.innerHTML='<td class="product-name"><a href="#">'+name_string+'</a></td><td class="product-name"><a href="#">'+res[i].order_id+'</a></td><td class="product-price"><span class="amount">'+res[i].total_price+'</span></td><td class="product-invoice"><a href="#">Download</a></td>'
+													ordersbody.appendChild(order_tr)
+													}
+														
+												}
+												orders_url = "{% url 'getorder' %}"
+												function getorder(){
+													jQuery.ajax({
+														url:orders_url,
+														type:'GET',
+														success:function(res){
+															renderorders(res)
+														}
+												})}
+												getorder()
+
+											</script>
+										</tbody>
+										
+									</table>
+								</div>
+            
+									</div>
+									
+								<!--	<div class="tab-pane" id="returnorders">
+									<div class="wishlist-table table-responsive">
+									<table>
+										<thead>
+											<tr>
+												
+												
+												<th class="product-name"><span class="nobr">Product Name</span></th>
+                                                <th class="product-name"><span class="nobr">Order No.</span></th>
+												<th class="product-price"><span class="nobr"> Unit Price </span></th>
+                                                <th class="product-remove"><span class="nobr">Check Process</span></th>
+												<th class="product-stock-stauts"><span class="nobr"> Stock Status </span></th>
+												<th class="product-add-to-cart"><span class="nobr">Buy It Again </span></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="product-remove"><a href="#">x</a></td>
+												
+												<td class="product-name"><a href="#">Vestibulum suscipit</a></td>
+                                                <td class="product-name"><a href="#">GHJGHJGJHGHJHJHJ</a></td>
+												<td class="product-price"><span class="amount">Rs35.00</span></td>
+                                               <td class="product-name"><a href="#">Check Process</a></td>
+												<td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
+												<td class="product-add-to-cart"><a href="#"> Buy It Again</a></td>
+											</tr>
+											<tr>
+												<td class="product-remove"><a href="#">x</a></td>
+												
+												<td class="product-name"><a href="#">Vestibulum dictum magna</a></td>
+                                                 <td class="product-name"><a href="#">GHJGHJGJHGHJHJHJ</a></td>
+												<td class="product-price"><span class="amount">Rs50.00</span></td>
+                                                <td class="product-name"><a href="#">Check Process</a></td>
+												<td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
+												<td class="product-add-to-cart"><a href="#"> Buy It Again</a></td>
+											</tr>
+										</tbody>
+										
+									</table>-->
+								</div>
+            
+								</div>
+								
+								
+							</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+						</div>
+					</div><!-- /container -->
+				</div>
+			</div>
+{% endblock content %}

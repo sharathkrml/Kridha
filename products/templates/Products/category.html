@@ -1,0 +1,196 @@
+{% extends "Accounts/base.html" %}
+{% block content %}
+
+<style>
+    
+.product-img > a::before {
+    background: #333 none repeat scroll 0 0;
+    content: "";
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 4;
+	transition:all .4s;
+}
+.single-new-product:hover a:before {
+    opacity: 0.1;
+}
+.product-img{
+	position:relative;
+}
+.product-img > a{
+	position:relative;
+	display:block;
+	transition:all .4s;
+}
+.product-img .seceond_img{
+	position:absolute;
+	left:0;
+	top:0;
+	opacity:0;
+	transition:all .4s;
+}
+.new-product-action {
+	bottom: 0;
+	position: absolute;
+	text-align: center;
+	width:100%;
+	z-index:4;
+	opacity:0;
+	transition:all.4s;
+	transform:scaleY(0);
+	transform-origin:center bottom 0;
+}
+.new-product-action a {
+	background: #e7cc98 none repeat scroll 0 0;
+	color: #ffffff;
+	display: inline-block;
+	font-size: 16px;
+	margin: -1px;
+	padding: 8px 11px;
+}
+.new-product-action a span.cart_pad {
+    margin-right: 7px;
+}
+.new-product-action a:hover{
+	background:#9d297e;	
+}
+.single-new-product:hover .seceond_img{opacity:1;}
+.single-new-product:hover .new-product-action{opacity:1;z-index:11111; transform:scaleY(1)}
+.product-content a h3{
+	color: #333333;
+	display: block;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 24px;
+	overflow: hidden;
+	text-transform: capitalize;	
+	margin: 10px 0;
+} 
+.product-content a h3:hover{
+	color:#9d297e;
+}
+.product-price-star i {
+	color: #9d297e;
+	font-size: 14px;
+}
+.product-content h4{
+	color: #333333;
+	font-size: 15px;
+	font-weight: 700;
+	margin-top: 7px;
+}
+span.new {
+	background: #ee5655 none repeat scroll 0 0;
+	color: #ffffff;
+	font-size: 12px;
+	padding: 4px 8px;
+	position: absolute;
+	top: 12px;
+	z-index: 111;
+}
+.price h4 {
+    display: inline-block;
+}
+h3.del-price {
+    color: #777;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.porduct-option-left.floatleft > span {
+  color: #555;
+}
+.product-icon-wrapper {
+	position: absolute;
+	right: 22px;
+	top: 5px;
+}
+.product-icon {
+	opacity: 0;
+	position: relative;
+	right: -40px;
+	visibility: hidden;
+	transition:all.4s;
+}
+.product-icon li {
+    margin-bottom: 5px;
+}
+.product-icon a {
+	background: #ffffff none repeat scroll 0 0;
+	display: flex;
+	flex-direction: column;
+	height: 40px;
+	justify-content: center;
+	text-align: center;
+	transition: all 0.4s ease 0s;
+	width: 40px;
+	margin-bottom: 3px;
+	color:#9d297e;
+}
+.new-product-area.home-page-2 .single-new-product .product-icon ul li a:hover {
+	background: #ffffff none repeat scroll 0 0;
+	color: #e73b49;
+}
+.product-icon a:hover{
+	background:#9d297e;
+	color:#fff;
+}
+.single-new-product:hover .product-icon {
+	opacity: 1;
+	right: 9px;
+	top: 5px;
+	visibility: visible;
+	z-index: 11;
+} 
+
+.product_list {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+</style>
+
+
+<ul class="product_list">
+    {% for slug,one_pro_details in category_dict.items %}
+        <li>
+            <div class="single-new-product">
+                <div class="product-img">
+                    <a href="{% url 'product_url' %}{{ slug }}">
+                        <img src="{{one_pro_details.image}}" class="first_img" alt="">
+                        
+                    </a>
+                </div>
+                <div class="product-content text-center">
+                    <a href="{% url 'product_url' %}{{ slug }}"><h3>{{one_pro_details.productname}}</h3></a>
+                    <div class="product-price-star">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                    <div class="price">
+                        <h4>₹ {{one_pro_details.selling_price}}</h4> 
+                        <h3 class="del-price"><del>₹ {{one_pro_details.MRP}}</del></h3>
+                    </div>								
+                </div>
+                <div class="product-icon-wrapper">
+                    <div class="product-icon">
+                        <ul>
+                            <li><a href="#"><span class="lnr lnr-sync"></span></a></li>
+                            <li><a href="#"><span class="lnr lnr-heart"></span></a></li>
+                            <li><a href="#"><span data-id='{{one_pro_details.id}}' class="lnr lnr-cart"></span></a></li>
+                        </ul>								
+                    </div>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+    
+    {% endblock %}

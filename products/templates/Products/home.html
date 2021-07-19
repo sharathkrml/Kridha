@@ -1,0 +1,221 @@
+{% extends "Accounts/base.html" %}
+{% block content %}
+<!-- service-area-end -->
+<div class="new-product-area hot-deal-area dotted-5 new-product-4 pt-80">
+	<div class="container">
+		<div class="row">
+			
+			<div class="col-lg-12 col-md-12">
+				<div class="section-title section-title-4">
+					<h2>Women</h2>
+				</div>	
+				<div class="row">
+					<div class="new-product-home-4-active">
+								{% for slug,details in context.jewellery_dict.items %}
+								<div class="col-lg-12">
+									<div class="single-new-product">
+										<div class="product-img">
+											<a href="{% url 'product_url' %}{{ slug }}">
+												<img src="{{details.image}}" class="first_img" alt="" />
+												
+											</a>
+										</div>
+										<div class="product-content text-center">
+											<a href="{% url 'product_url' %}{{ slug }}"><h3>{{details.productname}}</h3></a>
+											<div class="product-price-star">
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star-o"></i>
+												<i class="fa fa-star-o"></i>
+											</div>
+											<div class="price">
+												<h4>₹ {{details.selling_price}}</h4> 
+												<h3 class="del-price"><del>₹ {{details.MRP}}</del></h3>
+											</div>								
+										</div>
+										<div class="product-icon-wrapper">
+											<div class="product-icon">
+												<ul>
+													<li><a href="#"><span class="lnr lnr-sync"></span></a></li>
+													<li><a href="#"><span class="lnr lnr-heart"></span></a></li>
+													<li><a href="#"><span class="lnr lnr-cart"></span></a></li>
+												</ul>								
+											</div>
+										</div>
+									</div>
+								</div>
+								{% endfor %}		
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--new-product-area-start -->
+		<div class="new-product-area hot-deal-area dotted-5 new-product-4 ptb-50">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section-title section-title-4 section_4">
+							<h2>Men</h2>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="new-product-home-2-active">
+						{% for slug,details in context.mens_jewellery_dict.items %}
+						<div class="col-lg-12">
+							<div class="single-new-product">
+								<div class="product-img">
+									<a href="{% url 'product_url' %}{{ slug }}">
+										<img src="{{details.image}}" class="first_img" alt="" />
+										
+									</a>
+								</div>
+								<div class="product-content text-center">
+									<a href="{% url 'product_url' %}{{ slug }}"><h3>{{details.productname}}</h3></a>
+									<div class="product-price-star">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-o"></i>
+										<i class="fa fa-star-o"></i>
+									</div>
+									<div class="price">
+										<h4>₹ {{details.selling_price}}</h4> 
+										<h3 class="del-price"><del>₹ {{details.MRP}}</del></h3>
+									</div>								
+								</div>
+								<div class="product-icon-wrapper">
+									<div class="product-icon">
+										<ul>
+											<li><a href="#"><span class="lnr lnr-sync"></span></a></li>
+											<li><a href="#"><span class="lnr lnr-heart"></span></a></li>
+											<li><a href="#"><span class="lnr lnr-cart"></span></a></li>
+										</ul>								
+									</div>
+								</div>
+							</div>
+						</div>	
+						{% endfor %}					
+					</div>
+				</div>	
+			</div>
+		</div>
+		<!-- new-product-area-end -->
+	
+		<!-- feature-preduct-area-start 
+		<div class="feature-preduct-area home-page-2 feature-product-4 dotted-5 new-product-4 hot-deal-area  pb-50">
+			<div class="container">
+				<div class="row">
+					<div class="section-title hot-deal-title sale-4 section-title-4">
+						<h2>sale products</h2>
+					</div>				
+					<div class="col-lg-9 col-md-9">
+						<div class="feature-home-2-active feature-home-4-active">
+							<div class="single-product-items">
+								<div class="single-new-product">
+									<div class="product-img">
+										<a href="product-details.html">
+											<img src="img/product/1.jpg" class="first_img" alt="" />
+											
+										</a>
+									</div>
+									<div class="product-content text-center">
+										<a href="product-details.html"><h3>Beaumont Summit</h3></a>
+										<div class="product-price-star">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o"></i>
+											<i class="fa fa-star-o"></i>
+										</div>
+										<h4>Rs45000.00</h4>
+									</div>
+								</div>
+								
+													
+							</div>	
+
+							<div class="single-product-items">
+								<div class="single-new-product">
+									<div class="product-img">
+										<a href="product-details.html">
+											<img src="img/product/1.jpg" class="first_img" alt="" />
+											
+										</a>
+									</div>
+									<div class="product-content text-center">
+										<a href="product-details.html"><h3>Beaumont Summit</h3></a>
+										<div class="product-price-star">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o"></i>
+											<i class="fa fa-star-o"></i>
+										</div>
+										<h4>Rs45000.00</h4>
+									</div>
+								</div>
+								
+													
+							</div>	
+
+
+							<div class="single-product-items">
+								<div class="single-new-product">
+									<div class="product-img">
+										<a href="product-details.html">
+											<img src="img/product/1.jpg" class="first_img" alt="" />
+											
+										</a>
+									</div>
+									<div class="product-content text-center">
+										<a href="product-details.html"><h3>Beaumont Summit</h3></a>
+										<div class="product-price-star">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o"></i>
+											<i class="fa fa-star-o"></i>
+										</div>
+										<h4>Rs45000.00</h4>
+									</div>
+								</div>
+								
+													
+							</div>	
+
+
+							<div class="single-product-items" >
+								<div class="single-new-product">
+									<div class="product-img">
+										<a href="product-details.html">
+											<img src="img/product/1.jpg" class="first_img" alt="" />
+											
+										</a>
+									</div>
+									<div class="product-content text-center">
+										<a href="product-details.html"><h3>Beaumont Summit</h3></a>
+										<div class="product-price-star">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-o"></i>
+											<i class="fa fa-star-o"></i>
+										</div>
+										<h4>Rs45000.00</h4>
+									</div>
+								
+					<div class="col-lg-3 col-md-3 hidden-sm">
+						<div class="single-banner mar_b-30">
+							<a href="bedroom.html"><img src="img/banner/12.jpg" alt="" /></a>
+						</div>				
+					</div>
+				</div>
+			</div>
+		</div>
+		 feature-preduct-area-end -->
+
+{% endblock content %}
