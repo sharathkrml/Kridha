@@ -43,7 +43,6 @@ def signup(request):
         data = {'name': name, 'email': email, 'phone': phone}
         print(data)
         if(validate_phone(phone)):
-            phone = "+91" + phone
             try:
                 validate_email(email)
             except ValidationError as e:
