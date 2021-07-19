@@ -21,7 +21,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shoping</button>
-				<a href="{% url 'checkout' %}"><button type="button" class="btn btn-primary">Checkout</button></a>
+				<a href="#"><button type="button" class="btn btn-primary">Checkout</button></a>
 			</div>
 	 	</div>
 	</div>
@@ -77,35 +77,11 @@
 												<div class="numbers-row">
 													<label for="french-hens">Qty:</label>
 													<input type="number" id="french-hens" value="1">
-													<button class="btn btn-lg btn-success" data-id={{details.main_details.id}} onclick="addtocart({{details.main_details.id}})" type="submit"><span class="lnr lnr-cart"></span>Add to Cart</button>
+													<button class="btn btn-lg btn-success" data-id={{details.main_details.id}} type="submit"><span class="lnr lnr-cart"></span>Add to Cart</button>
 													<button type="button" class="btn btn-lg btn-warning col-sm-12"><span class="lnr lnr-cart"></span>Buy Now</button>	
 												</div>
                                               </form>  
 										</div>
-                                        <script>
-											var url = "{% url 'addtocart'  %}"
-											jQuery("#cart").submit(function(e){
-    												return false
-												});
-											function addtocart(i){
-												jQuery.ajax(
-													{
-														type:'POST',
-														url:url,
-														data:{
-															product_id : i,
-															quantity : document.getElementById("french-hens").value,
-														},
-														success:function(res){
-															console.log(res)
-															getcart()
-															$("#exampleModalCenter").modal();
-														}
-													}
-												)
-											}
-										</script>
-                                        
 										<div class="action-heiper">
 											<!--<a href="#"><span class="lnr lnr-sync"></span></a>-->
 											<a href="#"><span class="lnr lnr-cart"></span></a>
@@ -141,9 +117,9 @@
 												<div class="product-info-tab-content">
 													
 													<ul>
-                                                        {% for k,v in details.additional_details.items %}
+                                                        <!--{% for k,v in details.additional_details.items %}
 														<li> <b>{{k}}</b> : {{v}}</li>
-                                                        {% endfor %}
+                                                        {% endfor %}-->
 													</ul>
 												</div>
 											</div>

@@ -33,3 +33,11 @@ class Product(models.Model):
     discount = models.IntegerField(blank=True)
     image = models.CharField(max_length=2000, blank=True)
     additional_info = models.TextField(blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.productname)
+        super(Product, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.productname
