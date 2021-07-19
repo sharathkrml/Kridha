@@ -151,8 +151,7 @@ def product(request, slug):
     #    if(product.additional_info()[i] != 'nan'):
     #        key = i.replace('_', ' ').title()
     #        additional_details[key] = product.additional_details()[i]
-    splitted_list_of_additional_info = product.additional_info.split(":")
-    print(splitted_list_of_additional_info)
+    print(product.additional_info)
 
     details = {'main_details': main_details
                }
