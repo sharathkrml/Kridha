@@ -55,15 +55,15 @@
 				  					<li class="click_menu"><a href="#">{{user.name}} <i class="fa fa-angle-down"></i></a>
 									<ul class="click_menu_show">
 											<li><a href="{% url 'user' %}">My Account</a></li>
-											<li><a href="#">My Wish List</a></li>
+											<li><a href="{% url 'wishlist' %}">My Wish List</a></li>
 											<li><a href="{% url 'logout' %}">Logout</a></li>
 										</ul>
 									</li>
-                				{% else %}
+                			{% else %}
 									<li><a href="{% url 'login' %}">Login</a></li>
 									<li><a href="{% url 'signup' %}">Sign Up</a></li>
 									
-                				{% endif %}
+                {% endif %}
                                 
 									
 								</ul>
@@ -91,11 +91,11 @@
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
 							<div class="header-bottom-right-4-inner">
-								<a href="#"><span class="lnr lnr-heart"></span></a>
+								<a href="{% url 'wishlist' %}"><span class="lnr lnr-heart"></span></a>
 							</div>					
 							<div class="header-bottom-right header-bottom-right-4">
 								<div class="shop-cart shop-cart-4">									
-									<a href="#"><span class="lnr lnr-cart"></span></a>
+									<a href="{% url 'cart' %}"><span class="lnr lnr-cart"></span></a>
 								</div>
 								<div class="shop-cart-hover shop-cart-hover-4 fix">
 									<ul id="cart_id">
@@ -104,6 +104,97 @@
 
 									</ul>
 								</div>
+								<script>
+									cart_url = "{% url 'getcart' %}"
+									function delcartproduct(id){
+											jQuery.ajax({
+												url:cart_url,
+												type:'post',
+												data:{'delete_id':id},
+												success:function(res){
+													rendercart(res)
+												}
+											})
+										}
+									function rendercart(res) {
+													cart_ul = document.getElementById('cart_id')
+													var child = cart_ul.lastElementChild; 
+													while (child) {
+														cart_ul.removeChild(child);
+														child = cart_ul.lastElementChild;
+													}
+													var product_count = 0
+													for (var index in res){
+														if(index=='total'){
+															console.log()
+															total_li = document.createElement('li')
+															total_li.setAttribute("class","total-price")
+																total_span = document.createElement('span')
+																total_span.innerHTML = 'Total Rs '+ res['total']
+															total_li.appendChild(total_span)
+															checkout_url="{% url 'checkout' %}"
+															cart_ul.appendChild(total_li)
+															checkout_li = document.createElement('li')
+															checkout_li.setAttribute("class","checkout-bg")
+																checkout_link = document.createElement('a')
+																checkout_link.setAttribute('href',checkout_url)
+																checkout_link.innerHTML =' checkout <i class="fa fa-angle-right"></i>'
+															checkout_li.appendChild(checkout_link)
+															cart_ul.appendChild(checkout_li)
+
+														}else{
+															product_count=product_count+1
+															cart_li = document.createElement('li');
+	
+														image_div = document.createElement('div');
+														image_div.setAttribute('class',"cart-img")
+															image_a = document.createElement('a')
+															image_a.setAttribute('href',res[index]['product_url'])
+																image_img = document.createElement('img')
+																image_img.setAttribute('src',res[index]['image'])
+															image_a.appendChild(image_img)
+															image_div.appendChild(image_a)
+														cart_li.appendChild(image_div)
+														content_div = document.createElement('div');
+														content_div.setAttribute('class','cart-content')
+														content_h4 = document.createElement('h4')
+															content_a =  document.createElement('a')
+															content_a.setAttribute('href',res[index]['product_url'])
+															content_a.innerHTML=res[index]['quantity'] + ' X ' + res[index]['product_name']
+															content_h4.appendChild(content_a)
+														content_span = document.createElement('span')
+														content_span.setAttribute('class',"cart-price")
+														content_span.innerHTML=res[index]['quantity']+' X ' + res[index]['selling_price']+' = '+res[index]['product_total']
+														content_div.appendChild(content_h4)
+														content_div.appendChild(content_span)
+														cart_li.appendChild(content_div)
+	
+														delete_div = document.createElement('div');
+															var del = 'delcartproduct('+ res[index]['cart_id'] +')'
+															delete_div.setAttribute('onclick',del)
+															delete_i = document.createElement('i')
+															delete_i.setAttribute('class',"fa fa-times-circle")
+															delete_div.appendChild(delete_i)
+														cart_li.appendChild(delete_div)
+														cart_ul.appendChild(cart_li)
+														}
+														
+													}
+
+													console.log(product_count)
+													}
+										
+
+									function getcart () {
+											jQuery.ajax({
+												url:cart_url,
+												type:'GET',
+												success: function(res) {
+													rendercart(res)
+													}})
+										
+										}
+								</script>
 							</div>
 						</div>
 					</div>

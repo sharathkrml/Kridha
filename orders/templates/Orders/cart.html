@@ -1,0 +1,198 @@
+{% extends "Accounts/base.html" %}
+{% block content %}
+{% load static %}
+
+<!-- entry-header-area start -->
+		<div class="entry-header-area pt-40">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="entry-header">
+							<h1 class="entry-title">Cart</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- entry-header-area end -->	
+		<!-- cart-main-area start -->
+		<div class="cart-main-area ptb-40">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<form action="#">				
+							<div class="table-content table-responsive">
+								<table>
+									<thead>
+										<tr>
+											<th class="product-thumbnail">Image</th>
+											<th class="product-name">Product</th>
+											<th class="product-price">Price</th>
+											<th class="product-quantity">Quantity</th>
+											<th class="product-subtotal">Total</th>
+											<th class="product-remove">Remove</th>
+										</tr>
+									</thead>
+									<tbody id='carttablebody'>
+										
+									</tbody>
+								</table>
+							</div>
+							<div class="row">
+								<div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
+									<div class="buttons-cart">
+										<a href="{% url 'home' %}">Continue Shopping</a>
+									</div>
+									
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+									<div class="cart_totals">
+										<h2>Cart Totals</h2>
+										<table>
+											<tbody>
+												<tr class="cart-subtotal">
+													<th>Subtotal</th>
+													<td><span id='cart-subtotal-amount' class="amount"></span></td>
+												</tr>
+												<tr class="shipping">
+													<th>Shipping</th>
+													<td>
+														<span class="amount"><strike>₹100.00</strike> Free</span></td>
+														
+													</td>
+												</tr>
+												<tr class="order-total">
+													<th>Total</th>
+													<td>
+														<strong><span id='order-total-amount' class="amount"></span></strong>
+													</td>
+												</tr>											
+											</tbody>
+										</table>
+										<div class="wc-proceed-to-checkout">
+											<a href="{% url 'checkout' %}">Proceed to Checkout</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>	
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			cart_url = "{% url 'getcart' %}"
+
+			function delcartproduct(id){
+				jQuery.ajax({
+					url:cart_url,
+					type:'post',
+					data:{'delete_id':id},
+					success:function(res){
+						rendercart(res)
+						renderMainCart(res)
+						}
+					})
+				}
+
+
+			function change_quantity(id){
+				console.log(id)
+				input_id = "product-quantity-value"+id
+				console.log(document.getElementById(input_id).value)
+				jQuery.ajax({
+						url:cart_url,
+						type:'post',
+						data:{'change_id':id,quantity:document.getElementById(input_id).value},
+						success:function(res){
+							rendercart(res);
+							renderMainCart(res);
+						}
+				})
+			}
+			function renderMainCart(res){
+				tablebody = document.getElementById('carttablebody')
+				var child = tablebody.lastElementChild; 
+					while (child) {
+							tablebody.removeChild(child);
+							child = tablebody.lastElementChild;
+					}
+					for(var index in res){
+						if(index!='total'){
+							table_tr = document.createElement('tr')
+								td_thumb = document.createElement('td')
+								td_thumb.setAttribute('class',"product-thumbnail")
+									link=document.createElement('a')
+									link.setAttribute('href',res[index]['product_url'])
+										pro_img=document.createElement('img')
+										pro_img.setAttribute('src',res[index]['image'])
+									link.appendChild(pro_img)
+								td_thumb.appendChild(link)
+								table_tr.appendChild(td_thumb)
+
+								td_name = document.createElement('td')
+								td_name.setAttribute('class',"product-name")
+									link=document.createElement('a')
+									link.setAttribute('href',res[index]['product_url'])
+									link.innerHTML=res[index]['product_name']
+								td_name.appendChild(link)
+								table_tr.appendChild(td_name)
+											
+								td_price = document.createElement('td')
+								td_price.setAttribute('class','product-price')
+									amount_span = document.createElement('span')
+									amount_span.setAttribute('class','amount')
+									amount_span.innerHTML='₹'+res[index]['selling_price']
+								td_price.appendChild(amount_span)
+								table_tr.appendChild(td_price)
+
+								td_quantity = document.createElement('td')
+								td_quantity.setAttribute('class','product-quantity')
+									quantity_input = document.createElement('input')
+									quantity_input.setAttribute('type',"number")
+									input_id = "product-quantity-value"+res[index]['cart_id']
+									quantity_input.setAttribute('id',input_id)
+									quantity_input.setAttribute('value',res[index]['quantity'])
+									var change_fn = 'change_quantity('+res[index]['cart_id']+')'
+									quantity_input.setAttribute('oninput',change_fn)
+								td_quantity.appendChild(quantity_input)
+								table_tr.appendChild(td_quantity)
+
+								td_total = document.createElement('td')
+								td_total.setAttribute('class',"product-subtotal")
+								td_total.innerHTML=quantity_input.value * res[index]['selling_price']
+								table_tr.appendChild(td_total)
+
+								td_remove =  document.createElement('td')
+								td_remove.setAttribute('class','product-remove')
+									remove_div=document.createElement('div')
+									var del = 'delcartproduct('+ res[index]['cart_id'] +')'
+									remove_div.setAttribute('onclick',del)
+										remove_icon = document.createElement('i')
+										remove_icon.setAttribute('class',"fa fa-times")
+									remove_div.appendChild(remove_icon)
+								td_remove.appendChild(remove_div)
+								table_tr.appendChild(td_remove)
+						tablebody.appendChild(table_tr)
+						}else{
+							amt=document.getElementById('cart-subtotal-amount')
+							totalamt=document.getElementById('order-total-amount')
+							amt.innerHTML = '₹'+res['total']
+							totalamt.innerHTML = '₹'+res['total']
+
+						}
+						
+					}
+			}
+			function getMaincart () {
+					jQuery.ajax({
+						url:cart_url,
+						type:'GET',
+						success: function(res) {
+								renderMainCart(res)
+							}})
+						}
+			getMaincart()
+		</script>
+		<!-- cart-main-area end -->	
+{% endblock %}
