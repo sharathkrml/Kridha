@@ -11,7 +11,7 @@
 
 
 
-### create branch at added Product,Categroy Data -- eg:'test'
+### create branch at added Product,Category Data -- eg:'test'
 ```git chechkout test```
 1 . ```python manage.py makemigrations```
 2 . ```python manage.py migrate```
