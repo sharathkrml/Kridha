@@ -1,5 +1,5 @@
 # Kridha
-##E Commerce Website for Jewellery
+## E Commerce Website for Jewellery
 ### data scraped from www.voylla.com
 
 ### create virtualenv in cloned folder
