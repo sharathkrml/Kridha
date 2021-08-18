@@ -10,9 +10,9 @@
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs tabs-left">
 								<li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
-								<li><a href="#chnage_passwrd" data-toggle="tab">Change Password</a></li>
+								<li><a href="#change_password" data-toggle="tab">Change Password</a></li>
 								<li><a href="#manageaddress" data-toggle="tab">Manage Address</a></li>
-								<li><a href="#reentorders" data-toggle="tab">Recent Orders</a></li>
+								<li><a href="#recentorders" data-toggle="tab">Recent Orders</a></li>
 							<!--<li><a href="#returnorders" data-toggle="tab">Return Orders</a></li>-->
 							</ul>
 							</div>
@@ -44,7 +44,7 @@
             
             			</div>
             
-									<div class="tab-pane" id="chnage_passwrd">
+									<div class="tab-pane" id="change_password">
 									<form action="" method='post'>
 									<div class="form-group login-page">
 										<label for="">Old Password<span>*</span></label>
@@ -285,7 +285,7 @@
             
            							 </div>
             
-										<div class="tab-pane" id="reentorders">
+										<div class="tab-pane" id="recentorders">
 										<div class="wishlist-table table-responsive">
 										<table>
 										<thead>
@@ -295,20 +295,10 @@
 												<th class="product-name"><span class="nobr">Product Name</span></th>
                                                 <th class="product-name"><span class="nobr">Order No.</span></th>
 												<th class="product-price"><span class="nobr"> Total Price </span></th>
-												<th class="product-invoice"><span class="nobr"> Download Invoice </span></th>
+												<!--<th class="product-invoice"><span class="nobr"> Download Invoice </span></th>-->
 											</tr>
 										</thead>
 										<tbody id='orderobjectsbody'>
-											<tr>
-												<!--<td class="product-remove"><a href="#">x</a></td>
-												<td class="product-thumbnail"><a href="#"><img src="img/wishlist/1.jpg" alt="" /></a></td>-->
-												<td class="product-name"><a href="#"><span>&bull;</span>Vestibulum<br><span>&bull;</span> suscipit</a></td>
-                                                <td class="product-name"><a href="#">GHJGHJGJHGHJHJHJ</a></td>
-												<td class="product-price"><span class="amount">Rs35.00</span></td>
-												<td class="product-invoice"><a href="#">Download</a></td>
-												<!--<td class="product-stock-status"><span class="wishlist-in-stock">In Stock</span></td>
-												<td class="product-add-to-cart"><a href="#"> Buy It Again</a></td>-->
-											</tr>
 											<script>
 												function renderorders(res){
 													ordersbody = document.getElementById('orderobjectsbody')
@@ -317,16 +307,16 @@
 														ordersbody.removeChild(child);
 														child = ordersbody.lastElementChild;
 													}
-													console.log(res)
+													
 													for(var i in res){
 														order_tr=document.createElement('tr')
 														product_name_list=res[i].product_name
 														name_string=''
-														for(var j in product_name_list){
-															name_string=name_string+'<span>&bull;</span>'+ product_name_list[j]+'<br>'
-														}
-														console.log(res[i].order_id)
-													order_tr.innerHTML='<td class="product-name"><a href="#">'+name_string+'</a></td><td class="product-name"><a href="#">'+res[i].order_id+'</a></td><td class="product-price"><span class="amount">'+res[i].total_price+'</span></td><td class="product-invoice"><a href="#">Download</a></td>'
+														Object.entries(product_name_list).forEach(([key, value]) => {
+															console.log(key, value);
+															name_string=name_string+'<span>&bull;</span>'+ key+' x '+value+'<br>'
+															});
+													order_tr.innerHTML='<td class="product-name"><a href="#">'+name_string+'</a></td><td class="product-name"><a href="#">'+res[i].order_id+'</a></td><td class="product-price"><span class="amount">'+res[i].total_price+'</span></td>'
 													ordersbody.appendChild(order_tr)
 													}
 														

@@ -1,0 +1,375 @@
+{% extends "Accounts/base.html" %}
+{% block content %}
+{% load static %}
+
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span style="font-size: large; font-weight: bold; color: lightgreen; margin-right: 20px;" class="txt">Order Placed</span>	
+				<img src="https://image.flaticon.com/icons/png/128/845/845646.png" height="70px" width="70px">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" onclick='gotohome()' data-dismiss="modal">Continue Shoping</button>
+			</div>
+	 	</div>
+	</div>
+	<script>
+		home_url="{% url 'home' %}"
+		function gotohome(){
+			return window.location=home_url
+		}
+	</script>
+	</div>
+
+	<div class="modal fade" id="NoAddressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span style="font-size: large; font-weight: bold; color: lightgreen; margin-right: 20px;" class="txt">NO Address Selected</span>	
+				<img src="https://image.flaticon.com/icons/png/512/458/458594.png" height="70px" width="70px">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">exit</button>
+			</div>
+	 	</div>
+	</div>
+	</div>
+
+
+
+		<!-- entry-header-area start -->
+		<div class="entry-header-area ptb-40">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="entry-header">
+							<h1 class="entry-title">Checkout</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- entry-header-area end -->		
+		<!-- checkout-area start -->
+		<div class="checkout-area pb-50">
+			<div class="container">
+				<div class="row">
+					<form action="#">
+						<div class="col-lg-6 col-md-6">
+                        
+							<div class="checkbox-form">	
+                            					
+								<h3>Choose Address</h3>
+                                
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+								{% for address in addresses %}
+                               <div class="col-md-6 col-sm-6 col-xs-12 multiple_address">
+                                <label class="radio-inline">
+									<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="{{address.id}}"> {{address.fullname}}<br>{{address.building_details}}<br>{{address.area_details}}<br>{{address.town_details}} {{address.state}} {{address.pin_code}}<br> Phone number: {{address.mobile_no}}<br>
+                               </div>
+						      {% endfor %}
+
+                                </div>
+                                <h3>Enter New Address</h3>
+								<div class="row">
+                                <!-- Address-Coloum end -->
+                                
+									<div class="col-md-12">
+										<div class="state">
+											<label>State <span class="required">*</span></label>
+											<select name="state" id="state" class="form-control">
+											  
+												<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+												<option value="Andhra Pradesh">Andhra Pradesh</option>
+												<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+												<option value="Bihar">Bihar</option>
+												<option value="Assam">Assam</option>
+												<option value="Chhattisgarh">Chhattisgarh</option>
+												<option value="Chandigarh">Chandigarh</option>
+												<option value="Daman and Diu">Daman and Diu</option>
+												<option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli</option>
+												<option value="Lakshadweep">Lakshadweep</option>
+												<option value="Delhi">Delhi</option>
+												<option value="Goa">Goa</option>
+												<option value="Puducherry">Puducherry</option>
+												<option value="Haryana">Haryana</option>
+												<option value="Gujarat">Gujarat</option>
+												<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+												<option value="Himachal Pradesh">Himachal Pradesh</option>
+												<option value="Karnataka">Karnataka</option>
+												<option value="Jharkhand">Jharkhand</option>
+												<option value="Madhya Pradesh">Madhya Pradesh</option>
+												<option value="Kerala">Kerala</option>
+												<option value="Manipur">Manipur</option>
+												<option value="Maharashtra">Maharashtra</option>
+												<option value="Mizoram">Mizoram</option>
+												<option value="Meghalaya">Meghalaya</option>
+												<option value="Odisha">Odisha</option>
+												<option value="Nagaland">Nagaland</option>
+												<option value="Rajasthan">Rajasthan</option>
+												<option value="Punjab">Punjab</option>
+												<option value="Tamil Nadu">Tamil Nadu</option>
+												<option value="Sikkim">Sikkim</option>
+												<option value="Tripura">Tripura</option>
+												<option value="Telangana">Telangana</option>
+												<option value="Uttarakhand">Uttarakhand</option>
+												<option value="Uttar Pradesh">Uttar Pradesh</option>
+												<option value="West Bengal">West Bengal</option>
+											</select> 										
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="checkout-form-list">
+											<label>Full Name <span class="required">*</span></label>										
+											<input id='fullname' type="text" placeholder="" />
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="checkout-form-list">
+											<label>Phone No <span class="required">*</span></label>										
+											<input id='mobile_no' type="text" placeholder="" />
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="checkout-form-list">
+											<label><span class="required">Address*</span></label>
+											<input type="text" id=building_details placeholder="Flat, House no., Building, Company, Apartment*" />
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="checkout-form-list">									
+											<input type="text" id='area_details' placeholder="Area, Colony, Street, Sector, Village *" />
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="checkout-form-list">									
+											<input type="text" id='landmark_details' placeholder="Landmark " />
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="checkout-form-list">
+											<label>Town/City <span class="required">*</span></label>										
+											<input type="text" id='town_details' placeholder="" />
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="checkout-form-list">
+											<label>Postcode / Zip <span class="required">*</span></label>										
+											<input id='pin_code' type="text" placeholder="Postcode / Zip" />
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="checkout-form-list">
+											<label>Address Type<span class="required">*</span></label>
+											<select name="address_type" id="address_type" class="form-control">
+												<option value="Home">Home(7am - 9pm)</option>
+												<option value="Work">Work(10am to 5pm)</option>
+											</select>
+										</div>
+									</div>
+									
+									<div class="col-md-12">
+										<input class="btn btn-primary" type="button" onclick="addaddress()" value='Add address' ></input>
+									</div>								
+								</div>
+								<script>
+									checkout_address_url ="{% url 'checkout_address' %}"
+									function addaddress(){
+										fullname = document.getElementById('fullname').value
+										mobile_no = document.getElementById('mobile_no').value
+										pin_code = document.getElementById('pin_code').value
+										building_details = document.getElementById('building_details').value
+										area_details=document.getElementById('area_details').value
+										landmark_details = document.getElementById('landmark_details').value
+										town_details = document.getElementById('town_details').value
+										state = document.getElementById('state').value
+										address_type = document.getElementById('address_type').value
+										jQuery.ajax({
+											url:checkout_address_url,
+											type:'post',
+											data:{
+												'fullname':fullname,
+												'mobile_no':mobile_no,
+												'pin_code':pin_code,
+												'building_details':building_details,
+												'area_details':area_details,
+												'landmark_details':landmark_details,
+												'town_details':town_details,
+												'state':state,
+												'address_type':address_type
+											},
+											success:function(res){
+												location.reload()
+											}
+										})
+									}
+								</script>											
+							</div>
+						</div>	
+						<div class="col-lg-6 col-md-6">
+							<div class="your-order">
+								<h3>Your order</h3>
+								<div class="your-order-table table-responsive">
+									<table>
+										<thead>
+											<tr>
+												<th class="product-name">Product</th>
+												<th class="product-total">Total</th>
+											</tr>							
+										</thead>
+										<tbody id=cartitemsbody>
+
+										</tbody>
+										<tfoot>
+											<tr class="cart-subtotal">
+												<th>Cart Subtotal</th>
+												<td><span id='cart-subtotal-amount' class="amount"></span></td>
+											</tr>
+                                            
+                                            
+											<tr class="shipping">
+												<th>Shipping</th>
+												<td><span class="amount" ><strike>₹ 100</strike>  Free</span>
+												</td>
+											</tr>
+											<tr class="order-total">
+												<th>Order Total</th>
+												<td><strong><span id='order-total-amount' class="amount"></span></strong>
+												</td>
+											</tr>								
+										</tfoot>
+									</table>
+								</div>
+								<div class="payment-method">
+									<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="headingOne">
+												<h4 class="panel-title">
+													<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" 	aria-controls="collapseOne">
+													Direct Bank Transfer
+													</a>
+												</h4>
+											</div>
+											<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+												<div class="panel-body payment-content">
+													Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won't be shipped until the funds have cleared in our account.
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="headingTwo">
+												<h4 class="panel-title">
+													<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+													Cheque Payment
+													</a>
+												</h4>
+											</div>
+											<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+												<div class="panel-body payment-content">
+													Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="headingThree">
+												<h4 class="panel-title panel-img">
+												<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+												PayPal <img src="img/payment_c.png" alt="" />
+												</a>
+												</h4>
+											</div>
+											<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+												<div class="panel-body payment-content">
+													Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="order-button-payment">
+										<input type="button" onclick="checkout()" value="Place order" />
+									</div>									
+								</div>
+							</div>
+						</div>
+						<script>
+							cart_url = "{% url 'getcart' %}"
+							function delcartproduct(id){
+											jQuery.ajax({
+												url:cart_url,
+												type:'post',
+												data:{'delete_id':id},
+												success:function(res){
+													rendercart(res)
+													rendercheckout(res)
+												}
+											})
+										}
+							function rendercheckout(res){
+								cartitemsbody=document.getElementById('cartitemsbody')
+								var child = cartitemsbody.lastElementChild; 
+								while (child) {
+									cartitemsbody.removeChild(child);
+									child = cartitemsbody.lastElementChild;
+													}
+								for(var index in res){
+									if(index=='total'){
+										document.getElementById('cart-subtotal-amount').innerHTML='₹ '+res['total']
+										document.getElementById('order-total-amount').innerHTML='₹ '+res['total']
+									}else{
+										cart_row = document.createElement('tr')
+										cart_row.setAttribute('class','cart_item')
+											cart_td=document.createElement('td')
+											cart_td.setAttribute('class','product-name')
+											cart_td.innerHTML=res[index]['product_name'] +'<strong class="product-quantity"> x'+res[index]['quantity']+'</strong>'
+										cart_row.appendChild(cart_td)
+										cart_td=document.createElement('td')
+										cart_td.setAttribute('class','product-total')
+											cart_span=document.createElement('span')
+											cart_span.setAttribute('class','amount')
+											cart_span.innerHTML='₹ '+res[index]['product_total']
+										cart_td.appendChild(cart_span)
+										cart_row.appendChild(cart_td)
+										cartitemsbody.appendChild(cart_row)
+									}
+								}
+							}
+							function getcheckoutcart () {
+											jQuery.ajax({
+												url:cart_url,
+												type:'GET',
+												success: function(res) {
+													rendercheckout(res)
+													}})
+										
+										}
+							getcheckoutcart()
+							checkout_url="{% url 'checkout' %}"
+							function checkout(){
+								address_id=$('input[name=inlineRadioOptions]:checked').val()
+								if(address_id==null){
+									$("#NoAddressModal").modal();
+								}else{
+								jQuery.ajax({
+									url:checkout_url,
+									type:'POST',
+									data:{
+										'address_id':address_id
+									},
+									success:function(res){
+										console.log(res)
+										$("#exampleModalCenter").modal();
+									}
+
+								})
+								}
+								
+							}
+						</script>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- checkout-area end -->	
+		<!-- contact-area-start -->
+{% endblock%}
