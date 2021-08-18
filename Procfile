@@ -1,1 +1,1 @@
-web: gunicorn Kridha.wsgi
+web: gunicorn kridha.wsgi
