@@ -166,20 +166,20 @@
 									<div class="col-md-6">
 										<div class="checkout-form-list">
 											<label>Full name <span class="required">*</span></label>
-											<input type="text" class="form-control" id="fullname" name="fullname">
+											<input type="text" oninput="validatefullname(this.value)" class="form-control" id="fullname" name="fullname">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="checkout-form-list">
 											<label>Mobile number<span class="required">*</span></label>										
-											<input type="number" class="form-control" id="mobile_no" name="mobile_no">
+											<input type="text" oninput="validatemobno(this.value)" maxlength="15" class="form-control" id="mobile_no" name="mobile_no">
 										</div>
 									</div>
 									
 									<div class="col-md-12">
 										<div class="checkout-form-list">
 											<label>Pin Code <span class="required">*</span></label>
-											<input type="number" class="form-control" id="pin_code" name="pin_code">
+											<input type="text" maxlength="6" oninput="validatepincode(this.value)" class="form-control" id="pin_code" name="pin_code">
 										</div>
 									</div>
 									<div class="col-md-12">
@@ -260,6 +260,44 @@
 									<button type="submit" class="btn btn-default login-btn">Submit</button>
 									
 									</form>
+									<script>
+										function validatefullname(value){
+											if(value.length>0){
+												x=value[value.length-1]
+												var regex=/^[a-zA-Z ]+$/;
+												if (!x.match(regex))
+												{
+													document.getElementById('fullname').value=value.slice(0,value.length-1)
+												}	
+											}
+										}
+										function validatemobno(value){
+											if(value.length>0){
+												x=value[value.length-1]
+												var regex=/^[0-9+]+$/;
+												if (!x.match(regex))
+												{
+													document.getElementById('mobile_no').value=value.slice(0,value.length-1)
+												}
+												if(x==' '){
+													document.getElementById('mobile_no').value=value.slice(0,value.length-1)
+												}
+											}
+										}
+										function validatepincode(value){
+											if(value.length>0){
+												x=value[value.length-1]
+												var regex=/^[0-9+]+$/;
+												if (!x.match(regex))
+												{
+													document.getElementById('pin_code').value=value.slice(0,value.length-1)
+												}
+												if(x==' '){
+													document.getElementById('pin_code').value=value.slice(0,value.length-1)
+												}
+											}
+										}
+									</script>
 									<button class="btn btn-default login-btn" style='background: none!important;
   											border: none;
   											padding: 0!important;
