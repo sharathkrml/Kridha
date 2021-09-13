@@ -26,7 +26,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-body">
-				<span style="font-size: large; font-weight: bold; color: lightgreen; margin-right: 20px;" class="txt">NO Address Selected</span>	
+				<span id="noaddressmodalbody" style="font-size: large; font-weight: bold; color: lightgreen; margin-right: 20px;" class="txt">NO Address Selected</span>	
 				<img src="https://image.flaticon.com/icons/png/512/458/458594.png" height="70px" width="70px">
 			</div>
 			<div class="modal-footer">
@@ -254,7 +254,7 @@
 											<div style="border-radius:10px;" id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 												<label  style="margin-left:20px"  for="name_on_card"
 													>Name on card
-													<input style="width:200px; border:1px solid rgb(170, 169, 169); border-radius:5px;margin-top:10px;margin-left:20px;margin-bottom:10px; background-color:#EFEFEF " type="text" name="name_on_card" id="name_on_card" /> </label
+													<input style="width:200px; border:1px solid rgb(170, 169, 169); border-radius:5px;margin-top:10px;margin-left:20px;margin-bottom:10px; background-color:#EFEFEF " type="text" oninput="validatename(this.value)" name="name_on_card" id="name_on_card" /> </label
 												  ><br />
 												  <label style="margin-left:20px" for="card_number">Card Number </label>
 												  <input
@@ -262,9 +262,9 @@
 													type="tel"
 													inputmode="numeric"
 													name="card_number"
-													pattern="[0-9\s]{13,19}"
-													maxlength="19"
+													oninput="validatenumber(this.value)"
 													placeholder="xxxx xxxx xxxx xxxx"
+													maxlength="16"
 													style="width:200px; border:1px solid rgb(170, 169, 169); border-radius:5px;margin-top:10px;margin-left:20px;margin-bottom:10px; background-color:#EFEFEF;"
 												  />
 												  <br />
@@ -295,7 +295,7 @@
 												  <br />
 												  <label  style="margin-left:20px"  for="cvv"
 													>CVV
-													<input style="width:200px; border:1px solid rgb(170, 169, 169); padding-left:10px; border-radius:5px;margin-top:10px;margin-left:20px;margin-bottom:10px; background-color:#EFEFEF " type="tel" name="cvv" id="cvv" /> </label>
+													<input style="width:200px; border:1px solid rgb(170, 169, 169); padding-left:10px; border-radius:5px;margin-top:10px;margin-left:20px;margin-bottom:10px; background-color:#EFEFEF " type="tel" name="cvv" id="cvv" maxlength="3" oninput="validatecvv(this.value)" /> </label>
 												</div>
 											</div>
 										</div>
@@ -310,7 +310,7 @@
 											<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 												<div class="panel-body payment-content" style="width:100%; display:flex; flex-direction:row; align-items:center;justify-content:space-between;">
 													<span style="position:left; font-weight:bold">PAY ON DELIVERY</span>
-													<input type="radio"/>
+													<input id='payondelivery' type="radio"/>
 												</div>
 											</div>
 										</div>
@@ -376,34 +376,96 @@
 							getcheckoutcart()
 							checkout_url="{% url 'checkout' %}"
 							function checkout(){
-								
-								exp = $("expireYY").val();
+								expy = document.getElementById("expireYY").value;
+								expm = document.getElementById("expireMM").value;
+								card_number = document.getElementById("card_number").value;
+								name_on_card = document.getElementById("name_on_card").value;
+								cvv = document.getElementById("cvv").value;
+								payondelivery=document.getElementById('payondelivery').checked
 								address_id=$('input[name=inlineRadioOptions]:checked').val();
-								card_number = $("card-number").val();
-								name_on_card = $("name_on_card").val();
-								
-								if(address_id==null){
-									$("#NoAddressModal").modal();
-								}
-								
-								
-								else{
-								jQuery.ajax({
-									url:checkout_url,
-									type:'POST',
-									data:{
-										'address_id':address_id
-									},
-									success:function(res){
-										console.log(res)
-										$("#exampleModalCenter").modal();
+								if(payondelivery){
+									if(address_id==null){
+										document.getElementById('noaddressmodalbody').innerHTML="No Address Selected"
+										$("#NoAddressModal").modal();
 									}
-
-								})
+									else{
+										jQuery.ajax({
+											url:checkout_url,
+											type:'POST',
+											data:{
+												'address_id':address_id
+											},
+											success:function(res){
+												console.log(res)
+												$("#exampleModalCenter").modal();
+											}
+										})
+										}
 								}
+								else{
+									if(expy!='' && expm!='' && card_number.length==16 && name_on_card!='' && cvv.length==3){
+										if(address_id==null){
+											document.getElementById('noaddressmodalbody').innerHTML="No Address Selected"
+											$("#NoAddressModal").modal();
+										}
+										else{
+											jQuery.ajax({
+												url:checkout_url,
+												type:'POST',
+												data:{
+													'address_id':address_id
+												},
+												success:function(res){
+													console.log(res)
+													$("#exampleModalCenter").modal();
+												}
+											})
+											}
+										}
+									else{
+										document.getElementById('noaddressmodalbody').innerHTML="Enter Card Details"
+										$("#NoAddressModal").modal();								
+									}
+								}
+							}
+							
+							function validatename(value){
+								if(value.length>0){
+									x=value[value.length-1]
+									var regex=/^[a-zA-Z ]+$/;
+									if (!x.match(regex))
+									{
+										document.getElementById('name_on_card').value=value.slice(0,value.length-1)
+									}	
+								}
+							}
+						
+							function validatenumber(value){
+								if(value.length>0){
+									x=value[value.length-1]
+									var regex=/^[0-9]+$/;
+									if (!x.match(regex))
+									{
+										document.getElementById('card_number').value=value.slice(0,value.length-1)
+									}
+									if(x==' '){
+										document.getElementById('card_number').value=value.slice(0,value.length-1)
+									}
+								}
+							}
 
-								
-								
+							function validatecvv(value){
+								if(value.length>0){
+									x=value[value.length-1]
+									var regex=/^[0-9]+$/;
+									if (!x.match(regex))
+									{
+										document.getElementById('cvv').value=value.slice(0,value.length-1)
+									}
+									if(x==' '){
+										document.getElementById('cvv').value=value.slice(0,value.length-1)
+									}
+								}
 							}
 						</script>
 					</form>
